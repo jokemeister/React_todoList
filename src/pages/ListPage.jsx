@@ -1,9 +1,10 @@
 import React from 'react';
+import { Tasks } from '../components/Tasks';
 
 export const ListPage = () => {
     return (
-        <>
-            <h1>List page</h1>
-        </>
+        <div className="content show-all">
+            <Tasks />
+        </div>
     )
 }

@@ -7,11 +7,12 @@ import { Sidebar } from "./Sidebar";
 export const Layout = () => {
     return (
         <>
-            <Sidebar />
-            <Header />
-            
+            <Sidebar />            
             <main>
-                <Outlet />
+                <div className="container">
+                    <Header />
+                    <Outlet />  
+                </div>
             </main>
         </>
     )
