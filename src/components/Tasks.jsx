@@ -9,14 +9,14 @@ export const Tasks = () => {
           name: "Увімкнути тахометр",
           description: "Інакше буде боляче",
           done: true,
-          due_date: "2022-08-22",
+          due_date: new Date('2022-08-22'),
           list_id: 1
         },
         {
           id: 2,
           name: "Доробити верстку макету",
           done: false,
-          due_date: "2022-08-20",
+          due_date: new Date('2022-08-20'),
           list_id: 1
         },
         {
@@ -24,7 +24,7 @@ export const Tasks = () => {
           name: "Піти додому",
           description: "Інакше мене зачинять у офісі",
           done: false,
-          due_date: "2022-08-25",
+          due_date: new Date('2022-08-25'),
           list_id: 1
         }
     ])
@@ -32,7 +32,6 @@ export const Tasks = () => {
     return (
         <>
             {
-
                 tasks.map(t => 
                     <SingleTask 
                         key={ 'list_' + t.list_id + '_task_' + t.id }
