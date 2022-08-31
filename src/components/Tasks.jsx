@@ -32,18 +32,19 @@ export const Tasks = () => {
     return (
         <>
             {
+
                 tasks.map(t => 
                     <SingleTask 
-                        tasks={ tasks }
-                        setTasks={setTasks}
                         key={ 'list_' + t.list_id + '_task_' + t.id }
+                        tasks={ tasks }
+                        setTasks={ setTasks }
+                        index = {tasks.indexOf(t)}
                         id={ t.id } 
                         name={ t.name } 
                         description={ t.description } 
                         done={ t.done } 
                         due_date={ t.due_date } 
-                        list_id={ t.list_id } 
-                        
+                        list_id={ t.list_id }
                     />
                 ) 
             }
