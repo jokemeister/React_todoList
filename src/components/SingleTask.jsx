@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 
 export const SingleTask = (props) => {
-    const {tasks, setTasks, index, ...taskProps } = props
+    const {tasks, setTasks, index, t} = props
 
-    const [task, setNewTask] = useState(taskProps)
+    const [task, setNewTask] = useState(t)
 
     const checkHandler = () => {
         setNewTask({...task, done: !task.done})

@@ -1,5 +1,5 @@
-import { ListPage } from "./ListPage";
+import { TasksPage } from "./TasksPage";
 import { DashboardPage } from "./DashboardPage";
 import { TodayPage } from "./TodayPage";
 
-export { ListPage, DashboardPage, TodayPage };
+export { TasksPage, DashboardPage, TodayPage };
