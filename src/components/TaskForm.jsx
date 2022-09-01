@@ -1,8 +1,14 @@
-import React from "react";
-import { useContext } from "react";
+import axios from "axios";
+import React, { useContext }  from "react";
+import { useState } from "react";
+import { RequestsContext } from "../hoc/RequestsProvider";
 import { ModalContext } from "../hoc/ModalProvider";
+import { TasksContext } from "../hoc/TasksProvider";
+import { Lists } from "./Lists";
 
 export const TaskForm = () => {
+    const { createTask } = useContext(RequestsContext);
+    const { tasks, setTasks } = useContext(TasksContext);
   const { modalState, toggleModal } = useContext(ModalContext);
 
   const modalClass = () => {
@@ -14,9 +20,38 @@ export const TaskForm = () => {
     return modalClass;
   }
 
+  function useTextField(name, init,) {
+    const [value, setValue] = useState(init);
+    return {
+        name: name,
+        value: value,
+        onChange: e => setValue(e.target.value)
+    }
+  }
+
+  const name = useTextField('name', '');
+  const desc = useTextField('description', '');
+  const due_date = useTextField('due_date', '');
+  const list_id = useTextField('list_id', 1);
+
+  const addNewTask = e => {
+    e.preventDefault();
+    const newTask = {
+        name: name.value,
+        description: desc.value,
+        done: false,
+        due_date: new Date(due_date.value),
+        list_id: list_id.value
+    };
+
+    createTask(newTask)
+    .then(data => setTasks([...tasks, data]))
+  }
+
+
   return (
     <div className={ modalClass() } onClick={ toggleModal }>
-      <div className="addTask-modal-content">
+      <div className="addTask-modal-content" onClick={ (e) => e.stopPropagation() }>
           <div className="addTask-modal__header">
               <p className="addTask-modal__title">Створити нове завдання</p>
               <button className="addTask-modal__close-btn cross-btn" onClick={ toggleModal }>
@@ -25,7 +60,7 @@ export const TaskForm = () => {
                   </svg>
               </button>
           </div>
-          <form className="addTask__form" name="addTask">
+          <form className="addTask__form" name="addTask" onSubmit={addNewTask}>
               <label className="addTask__form__deadline-label">
                   <p>
                       <svg className="addTask__form__deadline-label__svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +69,7 @@ export const TaskForm = () => {
                       </svg>
                       Термін виконання
                   </p>
-                  <input className="addTask__form__deadline-input" type="text" name="due_date" placeholder="2022-08-28" />
+                  <input className="addTask__form__deadline-input" type="text" placeholder="2022-08-28" { ...due_date } />
                   <span></span>
               </label>
     
@@ -48,7 +83,7 @@ export const TaskForm = () => {
                       </svg>    
                       Назва завдання
                   </p>
-                  <input className="addTask__form__name-input" type="text" name="name" placeholder="Do some work" />
+                  <input className="addTask__form__name-input" type="text" placeholder="Зробити якусь справу" { ...name } />
                   <span className="addTask__form__name-error-msg error-msg">Обов'язкове поле</span>
               </label>
     
@@ -60,8 +95,21 @@ export const TaskForm = () => {
                       </svg>
                       Опис
                   </p>
-                  <textarea className="addTask__form__desc-input" name="description" placeholder="Do all the work in the right way"></textarea>
+                  <textarea className="addTask__form__desc-input" placeholder="Зробити і те, і інше" { ...desc }></textarea>
               </label>
+
+              <label className="addTask__form__list-label">
+                    <p>
+                        <svg className="addTask__form__list-label__svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 2H6.7H13" stroke="#262837" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M1 4.5H13M1 7H13M1 9.5H13M1 12C1.48 12 6.8 12 9.4 12" stroke="#262837" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Список
+                    </p>
+                    <select className="addTask__form__list-selector" { ...list_id }>
+                        <Lists parent='selector'/>
+                    </select>
+                </label>
               
               <div className="addTask__form__btn-block">
                   <button className="addTask__form__btn btn-blue btn" type="submit">Створити</button>

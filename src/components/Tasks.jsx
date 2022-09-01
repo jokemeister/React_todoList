@@ -1,62 +1,53 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
 import { FilterContext } from '../hoc/FilterProvider';
+import { RequestsContext } from '../hoc/RequestsProvider';
+import { TasksContext } from '../hoc/TasksProvider';
 import { SingleTask } from './SingleTask';
 
 export const Tasks = () => {
-    const [tasks, setTasks] = useState([
-        {
-          id: 1,
-          name: "Увімкнути тахометр",
-          description: "Інакше буде боляче",
-          done: true,
-          due_date: new Date('2022-08-22'),
-          list_id: 1
-        },
-        {
-          id: 2,
-          name: "Доробити верстку макету",
-          done: false,
-          due_date: new Date('2022-08-20'),
-          list_id: 2
-        },
-        {
-          id: 3,
-          name: "Піти додому",
-          description: "Інакше мене зачинять у офісі",
-          done: false,
-          due_date: new Date('2022-08-25'),
-          list_id: 3
+    let location = useLocation();
+    let { id } = useParams();
+    id = parseInt(id);
+    const { getTasks, getTodayTasks } = useContext(RequestsContext);
+    const { filterRules } = useContext(FilterContext);
+    const { tasks, setTasks } = useContext(TasksContext);
+
+    const [filteredTasks, setFilteredTasks] = useState([]);
+
+    useEffect(() => {
+        if (location.pathname === '/today') {
+            getTodayTasks().then(setTasks)
+        } else {
+            if (id) {
+
+            }
+            getTasks().then(newTasks => {
+                setTasks(newTasks);
+            })
         }
-    ])
-
-    const [filteredTasks, setFilteredTasks] = useState([])
-
-    const { filterRules } = useContext(FilterContext)
+    }, []);
 
     useEffect(() => {
         filterTasks(filterRules);
-    }, [filterRules])
-
-    useEffect(() => {
-        filterTasks(filterRules);
-    }, [tasks])
+    }, [tasks, filterRules])
 
     const filterTasks = ([...filterRules]) => {
+        // console.log('shit', tasks);
         if (filterRules.length >= 1) filterRules.forEach(rule => setFilteredTasks(tasks.filter(t => t[rule[0]] === rule[1])))
         else setFilteredTasks(tasks);
     }
 
     return (
         <>
-            {   filteredTasks.map(t => 
+            {   
+                filteredTasks.map(t => 
                     <SingleTask 
                         key = { 'list_' + t.list_id + '_task_' + t.id }
-                        tasks = { tasks }
-                        setTasks = { setTasks }
                         index = { tasks.indexOf(t) }
-                        t = { t }
+                        task = { t }
                     />
                 ) 
             }

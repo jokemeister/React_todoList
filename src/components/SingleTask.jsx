@@ -1,24 +1,25 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useContext } from 'react';
+import { RequestsContext } from '../hoc/RequestsProvider';
+import { TasksContext } from '../hoc/TasksProvider';
 
 export const SingleTask = (props) => {
-    const {tasks, setTasks, index, t} = props
+    const { task } = props
 
-    const [task, setNewTask] = useState(t)
+    const { setTasks } = useContext(TasksContext);
+    const { getTasks, updateTask, deleteTask } = useContext(RequestsContext);
 
     const checkHandler = () => {
-        setNewTask({...task, done: !task.done})
+        updateTask(task.id, {done: !task.done})
+            .then( () => getTasks().then(newTasks => {
+                setTasks(newTasks);
+            }))
     }
 
-    useEffect(() => {
-        tasks.splice(index, 1, task);
-        setTasks([...tasks]);
-    }, [task])
-
-    const deleteHandler = () => {
-        tasks.splice(index, 1);
-        setTasks([...tasks]);
+    function deleteHandler() {
+        deleteTask(task.id)
+            .then( () => getTasks().then(newTasks => {
+                setTasks(newTasks);
+        }))
     }
 
     const setClass = () => {
@@ -32,7 +33,6 @@ export const SingleTask = (props) => {
         else if (task.due_date < today && task.due_date !== '') {
             className += ' overdue';
         }
-
         return className;
     }
 
@@ -43,7 +43,7 @@ export const SingleTask = (props) => {
                     <path d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M4.6665 1.16663V3.49996M9.33317 1.16663V3.49996M1.1665 5.83329H12.8332" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="task__deadline-date">{ task.due_date.toISOString().split('T')[0] } </p>
+                <p className="task__deadline-date">{ task.due_date } </p>
             </span>
             <label className="task__body">
                 <input className="task__body-checkbox" type="checkbox" checked={ task.done } onChange={ checkHandler }/>

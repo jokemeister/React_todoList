@@ -19,6 +19,8 @@ export const FilterProvider = ({ children }) => {
     setFilterRules([...filterRules, rule]);
   }
 
+  // const removeRule=
+
   const filterData = { filterRules, addRule }
 
   return (

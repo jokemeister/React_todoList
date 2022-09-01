@@ -1,19 +1,25 @@
 import './App.css';
 import { Router } from './router'
-import { ListProvider } from "./hoc/ListProvider";
+import { RequestsProvider } from './hoc/RequestsProvider';
+import { ListsProvider } from "./hoc/ListsProvider";
 import { FilterProvider } from "./hoc/FilterProvider";
+import { TasksProvider } from "./hoc/TasksProvider";
 import { ModalProvider } from "./hoc/ModalProvider";
 
 function App() {
   return (
     <div className="App">
-      <ListProvider>
-        <FilterProvider>
-          <ModalProvider>
-            <Router />
-          </ModalProvider>
-        </FilterProvider>
-      </ListProvider>
+      <RequestsProvider>
+        <ListsProvider>
+          <FilterProvider>
+            <TasksProvider>
+              <ModalProvider>
+                <Router />
+              </ModalProvider>
+            </TasksProvider>
+          </FilterProvider>
+        </ListsProvider>
+      </RequestsProvider>
     </div>
   );
 }
