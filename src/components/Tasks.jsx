@@ -43,8 +43,8 @@ export const Tasks = () => {
         filterTasks(filterRules);
     }, [tasks])
 
-    const filterTasks = ([...rules]) => {
-        if (rules.length >= 1) rules.forEach(rule => setFilteredTasks(tasks.filter(t => t[rule[0]] === rule[1])))
+    const filterTasks = ([...filterRules]) => {
+        if (filterRules.length >= 1) filterRules.forEach(rule => setFilteredTasks(tasks.filter(t => t[rule[0]] === rule[1])))
         else setFilteredTasks(tasks);
     }
 
