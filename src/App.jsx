@@ -3,21 +3,21 @@ import { Router } from './router'
 import { RequestsProvider } from './hoc/RequestsProvider';
 import { ListsProvider } from "./hoc/ListsProvider";
 import { FilterProvider } from "./hoc/FilterProvider";
-import { TasksProvider } from "./hoc/TasksProvider";
 import { ModalProvider } from "./hoc/ModalProvider";
+import { TaskProvider } from './hoc/TaskProvider';
 
 function App() {
   return (
     <div className="App">
       <RequestsProvider>
         <ListsProvider>
-          <TasksProvider>
             <FilterProvider>
-              <ModalProvider>
-                <Router />
-              </ModalProvider>
+              <TaskProvider>
+                <ModalProvider>
+                  <Router />
+                </ModalProvider>
+              </TaskProvider>
             </FilterProvider>
-          </TasksProvider>
         </ListsProvider>
       </RequestsProvider>
     </div>

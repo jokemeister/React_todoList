@@ -1,29 +1,36 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext } from 'react';
 import axios from 'axios';
 
 export const RequestsContext = createContext();
 
 export const RequestsProvider = ({ children }) => {
-  const [url, setUrl] = useState('http://localhost:4000/tasks');
 
-  // get all tasks -- /tasks
-    function getTasks() {
-      return axios.get(url)
+  // get dashboard
+    function getDashboardReq() {
+      return axios.get('http://localhost:4000/dashboard')
         .then((res) => res.data)
         .catch(err => {throw new Error(err)})
     }
-  // /get all tasks -- /tasks
+  // /get dashboard
 
-  // create new task -- anywhere
-    function createTask(newTask) {
+  // get tasks
+    function getTasksReq(endPoint, listId) {
+      return axios.get(listId ? endPoint + listId : endPoint)
+        .then(res => res.data)
+        .catch(err => { throw new Error(err) })
+    }
+  // /get tasks
+
+    // create new task -- anywhere
+    function createTaskReq(newTask) {
       return axios.post('http://localhost:4000/tasks', newTask)
-          .then(res => res.data)
-          .catch(err => {throw new Error(err)})
+        .then(res => res.data)
+        .catch(err => {throw new Error(err)})
     }
   // create new task -- anywhere
 
   // update task -- /tasks/id
-    function updateTask(taskId, newValues) {
+    function updateTaskReq(taskId, newValues) {
       return axios.patch(`http://localhost:4000/tasks/${taskId}`, newValues)
         .then(res => res.data)
         .catch(err => {throw new Error(err)})
@@ -31,40 +38,32 @@ export const RequestsProvider = ({ children }) => {
   // /update task -- /tasks/id
 
   // delete task -- /tasks/id
-    function deleteTask(taskId) {
+    function deleteTaskReq(taskId) {
       return axios.delete(`http://localhost:4000/tasks/${taskId}`)
         .then(res => res.data)
         .catch(err => {throw new Error(err)})
     }
   // /delete task
 
-  // get dashboard
-    function getDashboard() {
-      return axios.get('http://localhost:4000/dashboard')
-        .then((res) => res.data)
-        .catch(err => {throw new Error(err)})
-    }
-  // /get dashboard
-
-  // get today
-    function getTodayTasks() {
-      return axios.get('http://localhost:4000/collection/today')
-        .then((res) => res.data)
-        .catch(err => {throw new Error(err)})
-    }
-  // get today
+  // // get today
+  //   function getTodayTasksReq() {
+  //     return axios.get('http://localhost:4000/collection/today')
+  //       .then((res) => res.data)
+  //       .catch(err => {throw new Error(err)})
+  //   }
+  // // get today
 
 
-  // get by list id
-    function getTasksByListId(listId) {
-      return axios.get(`http://localhost:4000/lists/${listId}/tasks?all=true`)
-        .then((res) => res.data)
-        .catch(err => {throw new Error(err)})
-    }
-  // 
+  // // get by list id
+  //   function getTasksByListId(listId) {
+  //     return axios.get(`http://localhost:4000/lists/${listId}/tasks?all=true`)
+  //       .then((res) => res.data)
+  //       .catch(err => {throw new Error(err)})
+  //   }
+  // // 
 
   // create list
-    function createList(name) {
+    function createListReq(name) {
       return axios.post('http://localhost:4000/lists', {'name': name})
         .then(res => res.data)
         .catch(err => { throw new Error(err)})
@@ -72,14 +71,14 @@ export const RequestsProvider = ({ children }) => {
   // /create list
 
   // delete list
-    function deleteList(listId) {
+    function deleteListReq(listId) {
       return axios.delete(`http://localhost:4000/lists/${listId}`)
         .then(res => res.data)
         .catch(err => {throw new Error(err)})
     }
   // /delete list
 
-  const requestsData = { url, setUrl, getTasks, createTask, updateTask, deleteTask, getDashboard, getTodayTasks, getTasksByListId, createList, deleteList}
+  const requestsData = { getTasksReq, createTaskReq, updateTaskReq, deleteTaskReq, getDashboardReq, createListReq, deleteListReq}
   return (
     <RequestsContext.Provider value={ requestsData }>
       { children } 

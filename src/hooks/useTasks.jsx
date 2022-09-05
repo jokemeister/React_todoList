@@ -1,32 +1,52 @@
-import React, { useContext, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
 import { FilterContext } from '../hoc/FilterProvider';
 import { RequestsContext } from '../hoc/RequestsProvider';
-import { TasksContext } from '../hoc/TasksProvider';
 
-export const useTasks = () => {
-  const { getTasks, getTodayTasks, getTasksByListId } = useContext(RequestsContext);
-  let location = useLocation();
-  let { id } = useParams();
-  id = parseInt(id);
-  const { tasks, setTasks, oneTask } = useContext(TasksContext);
-  const { setFilteredTasks } = useContext(FilterContext);
+export const useTasks = (endPoint) => {
+  const { getTasksReq, createTaskReq, updateTaskReq, deleteTaskReq } = useContext(RequestsContext);
+  const [ tasks, setTasks ] = useState([]);
+  const [ filteredTasks, setFilteredTasks ] = useState([]);
+  const { filterRule } = useContext(FilterContext);
 
   useEffect(() => {
-    if (location.pathname === '/today') {
-      console.log(location.pathname);
-        getTodayTasks().then(setTasks);
-    } else if (location.pathname === '/tasks') {
-      console.log(location.pathname);
-        getTasks().then(setTasks);
+    getTasksReq(endPoint)
+      .then(setTasks)
+  }, [])
+
+  useEffect(() => {
+    filterTasks(filterRule)
+  }, [tasks, filterRule])
+
+  function filterTasks(rule) {
+    if (rule === 'done') {
+      setFilteredTasks(tasks.filter(t => t.done === true))
+    } else if (rule === 'unDone') {
+      setFilteredTasks(tasks.filter(t => t.done === false))
     } else {
-      console.log(location.pathname, id);
-        getTasksByListId(id).then(res => {console.log(res); setTasks(res)});
-    };
-  }, [location.pathname, oneTask]);
+      setFilteredTasks(tasks)
+    }
+  }
 
-  useEffect(() => {
-    setFilteredTasks(tasks)
-  }, [tasks])
+  function createTask(newTask) {
+    createTaskReq(newTask)
+      .then(getTasksReq(endPoint))
+      .then(res => setTasks([...tasks, res]))
+  }
 
+  function updateTask(taskId, newValues) {
+    return updateTaskReq(taskId, newValues)
+      .then(res => setTasks(tasks.map(t => t.id === res.id ? {...t, ...newValues} : t)))
+  }
+
+  function deleteTask(taskId) {
+    return deleteTaskReq(taskId)
+      .then(res => setTasks(tasks.filter(t => t.id !== res[0].id)))
+  }
+
+  return {
+    filteredTasks,
+    createTask,
+    updateTask,
+    deleteTask
+  }
 }

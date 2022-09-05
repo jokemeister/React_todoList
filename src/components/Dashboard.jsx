@@ -4,28 +4,26 @@ import { useEffect } from 'react';
 import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ListsContext } from '../hoc/ListsProvider';
 import { RequestsContext } from '../hoc/RequestsProvider';
-import { TasksContext } from '../hoc/TasksProvider';
 import { Lists } from './Lists';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  let { id } = useParams();
-  id = parseInt(id)
+  let { listId } = useParams();
+  listId = parseInt(listId)
   const [today, setToday] = useState([]);
   const { lists, setLists, currentList, setCurrentList } = useContext(ListsContext);
-  const { oneTask } = useContext(TasksContext);
   const { oneList } = useContext(ListsContext);
-  const { getDashboard } = useContext(RequestsContext)
+  const { getDashboardReq } = useContext(RequestsContext)
 
   useEffect(() => {
-    getDashboard().then(dashboard => {
+    getDashboardReq().then(dashboard => {
       console.log(dashboard);
       setLists(dashboard.lists);
       setToday(dashboard.today);
       setActiveList(dashboard.lists);
     })
-  }, [location.pathname, oneTask, oneList]);
+  }, [location.pathname, oneList]);
 
   useEffect(() => {
     setActiveClass();
@@ -37,7 +35,7 @@ export const Dashboard = () => {
     } else if (location.pathname === '/tasks') {
      setCurrentList('Усі завдання');
     } else {
-     setCurrentList(lists.filter(l => l.id === id)[0].name);
+     setCurrentList(lists.filter(l => l.id === listId)[0].name);
     };
   };
 

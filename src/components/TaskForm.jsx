@@ -1,15 +1,30 @@
 import React, { useContext }  from "react";
+import { useEffect } from "react";
 import { useState } from "react";
-import { RequestsContext } from "../hoc/RequestsProvider";
 import { ModalContext } from "../hoc/ModalProvider";
-import { TasksContext } from "../hoc/TasksProvider";
+import { TaskContext } from "../hoc/TaskProvider";
 import { Lists } from "./Lists";
 
-export const TaskForm = () => {
-    const { createTask, updateTask } = useContext(RequestsContext);
-    const { tasks, setTasks, setOneTask } = useContext(TasksContext);
-  const { modalState, toggleModal } = useContext(ModalContext);
-  const [ formState, setFormState] = useState('create');
+export const TaskForm = props => {
+
+  const { createTask, updateTask } = props;
+  const { modalState, toggleModal, formState } = useContext(ModalContext);
+  const { currentTask } = useContext(TaskContext);
+  const [name, setName] = useState('');
+  const [desc, setDesc] = useState('');
+  const [due_date, setDueDate] = useState('');
+  const [list_id, setListId] = useState(1);
+  
+  useEffect(() => {
+    if(currentTask) console.log('it is', currentTask);
+    if (currentTask.name) {
+        setName(currentTask.name);
+        setDesc(currentTask.description);
+        setDueDate(currentTask.due_date.toISOString().split('T')[0]);
+        setListId(currentTask.list_id ? currentTask.list_id : currentTask.list.id);
+    }
+    newTask.done = currentTask.done;
+  }, [currentTask])
 
   const modalClass = () => {
     let modalClass = "addTask-modal";
@@ -20,49 +35,25 @@ export const TaskForm = () => {
     return modalClass;
   }
 
-  function useTextField(name, init,) {
-    const [value, setValue] = useState(init);
-    return {
-        name: name,
-        value: value,
-        onChange: e => setValue(e.target.value)
-    }
-  }
-
-  const name = useTextField('name', '');
-  const desc = useTextField('description', '');
-  const due_date = useTextField('due_date', '');
-  const list_id = useTextField('list_id', 1);
-
-    const newTask = {
-        name: name.value,
-        description: desc.value,
-        done: false,
-        due_date: new Date(due_date.value),
-        list_id: list_id.value
+  const newTask = {
+    name: name.value,
+    description: desc.value,
+    done: false,
+    due_date: new Date(due_date.value),
+    list_id: list_id.value
     };
-
-    const addNewTask = e => {
-        e.preventDefault();
-
-        createTask(newTask)
-            .then(data => setTasks([...tasks, data]))
-    }
-
-    const changeTask = e => {
-        e.preventDefault();
-
-        updateTask(taskId, newTask)
-            .then( res => {console.log(res); setOneTask(res)});
-
-    }
-
+    
     const submitHandler = (e) => {
-        if (formState === 'create') {
-            return addNewTask(e);
-        } else return  changeTask(e);
-    }
+        e.preventDefault();
 
+        if (formState === 'create') {
+            console.log('create', newTask);
+            return createTask(newTask);
+        } else {
+            console.log('update', newTask);
+            return updateTask(currentTask.id, newTask);
+        }
+    }
 
   return (
     <div className={ modalClass() } onClick={ toggleModal }>
@@ -84,7 +75,7 @@ export const TaskForm = () => {
                       </svg>
                       Термін виконання
                   </p>
-                  <input className="addTask__form__deadline-input" type="text" placeholder="2022-08-28" { ...due_date } />
+                  <input className="addTask__form__deadline-input" type="text" placeholder="2022-08-28" name="due_date" value={ due_date } onChange={ e => setDueDate(e.target.value) } />
                   <span></span>
               </label>
     
@@ -98,7 +89,7 @@ export const TaskForm = () => {
                       </svg>    
                       Назва завдання
                   </p>
-                  <input className="addTask__form__name-input" type="text" placeholder="Зробити якусь справу" { ...name } />
+                  <input className="addTask__form__name-input" type="text" placeholder="Зробити якусь справу" name="name" value={ name } onChange={ e => setName(e.target.value) } />
                   <span className="addTask__form__name-error-msg error-msg">Обов'язкове поле</span>
               </label>
     
@@ -110,7 +101,7 @@ export const TaskForm = () => {
                       </svg>
                       Опис
                   </p>
-                  <textarea className="addTask__form__desc-input" placeholder="Зробити і те, і інше" { ...desc }></textarea>
+                  <textarea className="addTask__form__desc-input" placeholder="Зробити і те, і інше" name="description" value={ desc } onChange={ e => setDesc(e.target.value) } ></textarea>
               </label>
 
               <label className="addTask__form__list-label">
@@ -121,7 +112,7 @@ export const TaskForm = () => {
                         </svg>
                         Список
                     </p>
-                    <select className="addTask__form__list-selector" { ...list_id }>
+                    <select className="addTask__form__list-selector" name="list_id" value={ list_id } onChange={ e => setListId(e.target.value) } >
                         <Lists parent='selector'/>
                     </select>
                 </label>

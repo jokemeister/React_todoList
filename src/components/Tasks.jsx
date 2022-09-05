@@ -1,25 +1,20 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 
-import { FilterContext } from '../hoc/FilterProvider';
-import { TasksContext } from '../hoc/TasksProvider';
-import { useTasks } from '../hooks/useTasks';
 import { SingleTask } from './SingleTask';
 
-export const Tasks = () => {
-    const { filteredTasks } = useContext(FilterContext);
-    const { tasks } = useContext(TasksContext);
-
-    useTasks();
+export const Tasks = props => {
+    const { filteredTasks, updateTask, deleteTask } = props;
 
     return (
         <>
-        {console.log('tasks', tasks)}
+        {console.log('tasks', filteredTasks)}
             {   
-                filteredTasks.map(t => 
+                filteredTasks && filteredTasks.map(t => 
                     <SingleTask 
                         key = { 'list_' + t.list_id + '_task_' + t.id }
-                        index = { tasks.indexOf(t) }
                         task = { t }
+                        updateTask = { updateTask }
+                        deleteTask = { deleteTask }
                     />
                 ) 
             }

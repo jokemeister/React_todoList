@@ -5,8 +5,8 @@ import { FilterContext } from '../hoc/FilterProvider';
 import { ListsContext } from '../hoc/ListsProvider';
 
 export const Header = () => {
-    const { toggleModal } = useContext(ModalContext);
-    const { filterTasks } = useContext(FilterContext);
+    const { setFormState, toggleModal } = useContext(ModalContext);
+    const { setFilterRule } = useContext(FilterContext);
     const { currentList } = useContext(ListsContext);
 
     const makeActive = (e) => {
@@ -14,6 +14,11 @@ export const Header = () => {
         navLinks.forEach(link => link.classList.remove('is-active'));
         e.target.classList.add('is-active');
     };
+
+    function openClickHandler() {
+        setFormState('create');  
+        toggleModal();
+    }
 
     return (
         <div className="header">
@@ -24,13 +29,13 @@ export const Header = () => {
                 <h1 className="header__top__title">{ currentList }</h1>
             </span>
             <p className="header__bot-text">Обраний список завдань</p>
-            <button className="header__btn-open-modal btn-blue btn" onClick={ toggleModal }>+ Додати нове завдання</button>
+            <button className="header__btn-open-modal btn-blue btn" onClick={ openClickHandler }>+ Додати нове завдання</button>
             <nav className="header__nav">
                 <button 
                     href="#" 
                     className="header__nav-link is-active" 
                     value="any" 
-                    onClick={ e => {filterTasks(e.target.value); makeActive(e)} }
+                    onClick={ e => {setFilterRule(e.target.value); makeActive(e)} }
                 >
                     Всі
                 </button>
@@ -38,7 +43,7 @@ export const Header = () => {
                     href="#" 
                     className="header__nav-link" 
                     value='unDone' 
-                    onClick={ e => {filterTasks(e.target.value); makeActive(e)} }
+                    onClick={ e => {setFilterRule(e.target.value); makeActive(e)} }
                 >
                     У роботі
                 </button>
@@ -46,7 +51,7 @@ export const Header = () => {
                     href="#" 
                     className="header__nav-link" 
                     value='done'
-                    onClick={ e => {filterTasks(e.target.value); makeActive(e)} }
+                    onClick={ e => {setFilterRule(e.target.value); makeActive(e)} }
                 >
                     Виконані
                 </button>

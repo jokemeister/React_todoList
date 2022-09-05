@@ -9,7 +9,7 @@ export const Router = () => {
         <Routes>
             <Route path='/' element={ <Layout /> }>
                 <Route path='/tasks' element={ <TasksPage /> } />
-                <Route path='/todo-list/:id' element={ <TodoListPage /> } />
+                <Route path='/todo-list/:listId' element={ <TodoListPage /> } />
                 <Route path='/today' element={ <TodayTasksPage /> } />
             </Route>
         </Routes>
