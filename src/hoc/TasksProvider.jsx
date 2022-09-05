@@ -4,9 +4,9 @@ export const TasksContext = createContext([]);
 
 export const TasksProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
-  const [url, setUrl] = useState('http://localhost:4000/tasks');
+  const [oneTask, setOneTask] = useState({});
 
-  const tasksData = { tasks, setTasks, url, setUrl }
+  const tasksData = { tasks, setTasks, oneTask, setOneTask }
   return (
     <TasksContext.Provider value={ tasksData }>
       { children } 

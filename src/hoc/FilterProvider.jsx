@@ -1,27 +1,23 @@
 import React, { createContext, useState } from 'react';
+import { useContext } from 'react';
+import { TasksContext } from './TasksProvider';
 
-export const FilterContext = createContext(null);
+export const FilterContext = createContext([]);
 
 export const FilterProvider = ({ children }) => {
-  const [filterRules, setFilterRules] = useState([])
-
-  const addRule = (key, value) => {
-    let rule = [];
-
-    if (value === "true") value = true;
-    else if (value === "false") value = false
-    
-    if (value !== "any") rule = [key, value];
-
-    console.log(rule);
-
-    filterRules.filter(rule => rule[0] !== key)
-    setFilterRules([...filterRules, rule]);
+  const { tasks } = useContext(TasksContext);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const filterTasks = (rule) => {
+    if (rule === 'done') {
+      setFilteredTasks(tasks.filter(t => t.done === true))
+    } else if (rule === 'unDone') {
+      setFilteredTasks(tasks.filter(t => t.done === false))
+    } else {
+      setFilteredTasks(tasks)
+    }
   }
 
-  // const removeRule=
-
-  const filterData = { filterRules, addRule }
+  const filterData = { filterTasks, filteredTasks, setFilteredTasks }
 
   return (
     <FilterContext.Provider value={ filterData }>

@@ -1,7 +1,18 @@
 import React from 'react';
+import { useState } from 'react';
+import { useContext } from 'react';
+import { ListsContext } from '../hoc/ListsProvider';
+import { RequestsContext } from '../hoc/RequestsProvider';
 import { Dashboard } from './Dashboard';
 
 export const Sidebar = () => {
+    const { createList } = useContext(RequestsContext);
+    const { setOneList } = useContext(ListsContext);
+    const [listName, setListName] = useState('name');
+    function createNewList(e) {
+        e.preventDefault();
+        createList(listName).then(setOneList);
+    }
     return (
         <aside className="sidebar">
             <div className="sidebar__header">
@@ -24,9 +35,9 @@ export const Sidebar = () => {
                 </div>
             </div>
             <Dashboard />
-            <form className="sidebar__addList-block" name="list">
+            <form className="sidebar__addList-block" name="list" onSubmit={createNewList}>
                 <label className="sidebar__addList-block__label">
-                    <input className="sidebar__addList-block__input" type="text" placeholder="Назва списку" name="name" />
+                    <input className="sidebar__addList-block__input" type="text" placeholder="Назва списку" name="name" value={listName} onChange={e => setListName(e.target.value)} />
                     <span className="sidebar__addList-block__error-msg error-msg">Обов'язкове поле</span>
                 </label>
                 <button type="submit" className="btn btn-blue sidebar__addList-block__btn">Додати список</button>

@@ -1,15 +1,12 @@
 import React from 'react';
 import { useContext } from "react";
-// import { ListContext } from "../hoc/ListProvider";
 import { ModalContext } from "../hoc/ModalProvider";
 import { FilterContext } from '../hoc/FilterProvider';
-import { useParams } from 'react-router-dom';
 import { ListsContext } from '../hoc/ListsProvider';
 
 export const Header = () => {
-    const params = useParams();
     const { toggleModal } = useContext(ModalContext);
-    const { addRule } = useContext(FilterContext);
+    const { filterTasks } = useContext(FilterContext);
     const { currentList } = useContext(ListsContext);
 
     const makeActive = (e) => {
@@ -24,7 +21,7 @@ export const Header = () => {
                 <svg className="header__top__menu" viewBox="0 0 12 10" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 1H12M12 5H0M12 9H0" stroke="#262837" strokeWidth="1.5"/>
                 </svg>
-                <h1 className="header__top__title">{currentList}</h1>
+                <h1 className="header__top__title">{ currentList }</h1>
             </span>
             <p className="header__bot-text">Обраний список завдань</p>
             <button className="header__btn-open-modal btn-blue btn" onClick={ toggleModal }>+ Додати нове завдання</button>
@@ -33,23 +30,23 @@ export const Header = () => {
                     href="#" 
                     className="header__nav-link is-active" 
                     value="any" 
-                    onClick={ e => {addRule('done', e.target.value); makeActive(e)} }
+                    onClick={ e => {filterTasks(e.target.value); makeActive(e)} }
                 >
                     Всі
                 </button>
                 <button 
                     href="#" 
                     className="header__nav-link" 
-                    value={ false } 
-                    onClick={ e => {addRule('done', e.target.value); makeActive(e)} }
+                    value='unDone' 
+                    onClick={ e => {filterTasks(e.target.value); makeActive(e)} }
                 >
                     У роботі
                 </button>
                 <button 
                     href="#" 
                     className="header__nav-link" 
-                    value={ true } 
-                    onClick={ e => {addRule('done', e.target.value); makeActive(e)} }
+                    value='done'
+                    onClick={ e => {filterTasks(e.target.value); makeActive(e)} }
                 >
                     Виконані
                 </button>

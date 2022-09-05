@@ -3,23 +3,19 @@ import { RequestsContext } from '../hoc/RequestsProvider';
 import { TasksContext } from '../hoc/TasksProvider';
 
 export const SingleTask = (props) => {
-    const { task } = props
+    const { task } = props;
 
-    const { setTasks } = useContext(TasksContext);
-    const { getTasks, updateTask, deleteTask } = useContext(RequestsContext);
+    const { updateTask, deleteTask } = useContext(RequestsContext);
+    const { setOneTask } = useContext(TasksContext)
 
     const checkHandler = () => {
         updateTask(task.id, {done: !task.done})
-            .then( () => getTasks().then(newTasks => {
-                setTasks(newTasks);
-            }))
+            .then( (res) => {console.log(res); setOneTask(res)});
     }
 
     function deleteHandler() {
         deleteTask(task.id)
-            .then( () => getTasks().then(newTasks => {
-                setTasks(newTasks);
-        }))
+            .then( (res) => {console.log(res); setOneTask({})});
     }
 
     const setClass = () => {

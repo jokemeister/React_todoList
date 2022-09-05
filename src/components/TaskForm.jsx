@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useContext }  from "react";
 import { useState } from "react";
 import { RequestsContext } from "../hoc/RequestsProvider";
@@ -7,9 +6,10 @@ import { TasksContext } from "../hoc/TasksProvider";
 import { Lists } from "./Lists";
 
 export const TaskForm = () => {
-    const { createTask } = useContext(RequestsContext);
-    const { tasks, setTasks } = useContext(TasksContext);
+    const { createTask, updateTask } = useContext(RequestsContext);
+    const { tasks, setTasks, setOneTask } = useContext(TasksContext);
   const { modalState, toggleModal } = useContext(ModalContext);
+  const [ formState, setFormState] = useState('create');
 
   const modalClass = () => {
     let modalClass = "addTask-modal";
@@ -34,8 +34,6 @@ export const TaskForm = () => {
   const due_date = useTextField('due_date', '');
   const list_id = useTextField('list_id', 1);
 
-  const addNewTask = e => {
-    e.preventDefault();
     const newTask = {
         name: name.value,
         description: desc.value,
@@ -44,9 +42,26 @@ export const TaskForm = () => {
         list_id: list_id.value
     };
 
-    createTask(newTask)
-    .then(data => setTasks([...tasks, data]))
-  }
+    const addNewTask = e => {
+        e.preventDefault();
+
+        createTask(newTask)
+            .then(data => setTasks([...tasks, data]))
+    }
+
+    const changeTask = e => {
+        e.preventDefault();
+
+        updateTask(taskId, newTask)
+            .then( res => {console.log(res); setOneTask(res)});
+
+    }
+
+    const submitHandler = (e) => {
+        if (formState === 'create') {
+            return addNewTask(e);
+        } else return  changeTask(e);
+    }
 
 
   return (
@@ -60,7 +75,7 @@ export const TaskForm = () => {
                   </svg>
               </button>
           </div>
-          <form className="addTask__form" name="addTask" onSubmit={addNewTask}>
+          <form className="addTask__form" name="addTask" onSubmit={submitHandler} >
               <label className="addTask__form__deadline-label">
                   <p>
                       <svg className="addTask__form__deadline-label__svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">

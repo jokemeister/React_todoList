@@ -1,6 +1,5 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
-import { useEffect } from 'react';
 
 export const RequestsContext = createContext();
 
@@ -11,7 +10,7 @@ export const RequestsProvider = ({ children }) => {
     function getTasks() {
       return axios.get(url)
         .then((res) => res.data)
-        .catch((err) => {throw new Error(err)})
+        .catch(err => {throw new Error(err)})
     }
   // /get all tasks -- /tasks
 
@@ -43,7 +42,7 @@ export const RequestsProvider = ({ children }) => {
     function getDashboard() {
       return axios.get('http://localhost:4000/dashboard')
         .then((res) => res.data)
-        .catch((err) => {throw new Error(err)})
+        .catch(err => {throw new Error(err)})
     }
   // /get dashboard
 
@@ -51,20 +50,36 @@ export const RequestsProvider = ({ children }) => {
     function getTodayTasks() {
       return axios.get('http://localhost:4000/collection/today')
         .then((res) => res.data)
-        .catch((err) => {throw new Error(err)})
+        .catch(err => {throw new Error(err)})
     }
   // get today
 
 
   // get by list id
-    function getListTasks() {
-      return axios.get('http://localhost:4000/collection/today')
+    function getTasksByListId(listId) {
+      return axios.get(`http://localhost:4000/lists/${listId}/tasks?all=true`)
         .then((res) => res.data)
-        .catch((err) => {throw new Error(err)})
+        .catch(err => {throw new Error(err)})
     }
   // 
 
-  const requestsData = { url, setUrl, getTasks, createTask, updateTask, deleteTask, getDashboard, getTodayTasks }
+  // create list
+    function createList(name) {
+      return axios.post('http://localhost:4000/lists', {'name': name})
+        .then(res => res.data)
+        .catch(err => { throw new Error(err)})
+    }
+  // /create list
+
+  // delete list
+    function deleteList(listId) {
+      return axios.delete(`http://localhost:4000/lists/${listId}`)
+        .then(res => res.data)
+        .catch(err => {throw new Error(err)})
+    }
+  // /delete list
+
+  const requestsData = { url, setUrl, getTasks, createTask, updateTask, deleteTask, getDashboard, getTodayTasks, getTasksByListId, createList, deleteList}
   return (
     <RequestsContext.Provider value={ requestsData }>
       { children } 

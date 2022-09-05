@@ -11,13 +11,13 @@ function App() {
     <div className="App">
       <RequestsProvider>
         <ListsProvider>
-          <FilterProvider>
-            <TasksProvider>
+          <TasksProvider>
+            <FilterProvider>
               <ModalProvider>
                 <Router />
               </ModalProvider>
-            </TasksProvider>
-          </FilterProvider>
+            </FilterProvider>
+          </TasksProvider>
         </ListsProvider>
       </RequestsProvider>
     </div>
