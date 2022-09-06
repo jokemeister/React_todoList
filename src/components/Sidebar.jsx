@@ -6,12 +6,12 @@ import { RequestsContext } from '../hoc/RequestsProvider';
 import { Dashboard } from './Dashboard';
 
 export const Sidebar = () => {
-    const { createList } = useContext(RequestsContext);
+    const { createListReq } = useContext(RequestsContext);
     const { setOneList } = useContext(ListsContext);
-    const [listName, setListName] = useState('name');
+    const [listName, setListName] = useState('');
     function createNewList(e) {
         e.preventDefault();
-        createList(listName).then(setOneList);
+        createListReq(listName).then(setOneList);
     }
     return (
         <aside className="sidebar">
@@ -37,7 +37,7 @@ export const Sidebar = () => {
             <Dashboard />
             <form className="sidebar__addList-block" name="list" onSubmit={createNewList}>
                 <label className="sidebar__addList-block__label">
-                    <input className="sidebar__addList-block__input" type="text" placeholder="Назва списку" name="name" value={listName} onChange={e => setListName(e.target.value)} />
+                    <input className="sidebar__addList-block__input" type="text" placeholder="Назва списку" name="listName" value={listName} onChange={e => setListName(e.target.value)} />
                     <span className="sidebar__addList-block__error-msg error-msg">Обов'язкове поле</span>
                 </label>
                 <button type="submit" className="btn btn-blue sidebar__addList-block__btn">Додати список</button>

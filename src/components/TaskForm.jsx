@@ -36,23 +36,48 @@ export const TaskForm = props => {
   }
 
   const newTask = {
-    name: name.value,
-    description: desc.value,
+    name: name,
+    description: desc,
     done: false,
-    due_date: new Date(due_date.value),
-    list_id: list_id.value
+    due_date: new Date(due_date),
+    list_id: list_id
     };
     
     const submitHandler = (e) => {
         e.preventDefault();
+        if (!formValidation(e)) return;
 
         if (formState === 'create') {
+            console.log(name);
+            console.log(desc);
+            console.log(due_date);
+            console.log(list_id);
             console.log('create', newTask);
             return createTask(newTask);
         } else {
             console.log('update', newTask);
             return updateTask(currentTask.id, newTask);
         }
+
+    }
+
+    function formValidation(e) {
+        if (!name.length > 0) {
+            console.log(e.target.name);
+            e.target.name.classList.add('invalid');
+        } else e.target.name.classList.remove('invalid');
+
+        return name.length > 0;
+    }
+
+    function cleaner(e) {
+        if (!e.target.name.classList.contains('invalid')) {
+            setName('');
+            setDesc('');
+            setDueDate('');
+            setListId(1);
+        } else return
+
     }
 
   return (
@@ -66,7 +91,7 @@ export const TaskForm = props => {
                   </svg>
               </button>
           </div>
-          <form className="addTask__form" name="addTask" onSubmit={submitHandler} >
+          <form className="addTask__form" name="addTask" onSubmit={ e => { submitHandler(e); cleaner(e) }} >
               <label className="addTask__form__deadline-label">
                   <p>
                       <svg className="addTask__form__deadline-label__svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">

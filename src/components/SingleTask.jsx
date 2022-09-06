@@ -8,7 +8,10 @@ export const SingleTask = (props) => {
     const { setFormState, toggleModal } = useContext(ModalContext);
     const { setCurrentTask } = useContext(TaskContext);
     
-    task.due_date = typeof(task.due_date) === Date ? task.due_date : new Date(task.due_date);
+    // task.due_date = typeof(task.due_date) === Date ? task.due_date : new Date(task.due_date);
+    // task.due_date = task.due_date === new Date('1970-01-01') ? '' : task.due_date;
+
+    console.log(typeof(task.due_date));
 
     const checkHandler = () => {
         updateTask(task.id, {done: !task.done})
@@ -27,7 +30,8 @@ export const SingleTask = (props) => {
         if (task.done === true) {
             className += ' done';
         }
-        else if (task.due_date < today && task.due_date !== '') {
+        else if (task.due_date < today && task.due_date !== '' && task.due_date !== null) {
+            console.log(task.due_date);
             className += ' overdue';
         }
         return className;
@@ -48,7 +52,7 @@ export const SingleTask = (props) => {
                     <path d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M4.6665 1.16663V3.49996M9.33317 1.16663V3.49996M1.1665 5.83329H12.8332" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="task__deadline-date">{ task.due_date.toISOString().split('T')[0] } </p>
+                <p className="task__deadline-date">{ task.due_date ? task.due_date.split('T')[0] : task.due_date } </p>
             </span>
             <label className="task__body">
                 <input className="task__body-checkbox" type="checkbox" checked={ task.done } onChange={ checkHandler }/>

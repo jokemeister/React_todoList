@@ -45,23 +45,6 @@ export const RequestsProvider = ({ children }) => {
     }
   // /delete task
 
-  // // get today
-  //   function getTodayTasksReq() {
-  //     return axios.get('http://localhost:4000/collection/today')
-  //       .then((res) => res.data)
-  //       .catch(err => {throw new Error(err)})
-  //   }
-  // // get today
-
-
-  // // get by list id
-  //   function getTasksByListId(listId) {
-  //     return axios.get(`http://localhost:4000/lists/${listId}/tasks?all=true`)
-  //       .then((res) => res.data)
-  //       .catch(err => {throw new Error(err)})
-  //   }
-  // // 
-
   // create list
     function createListReq(name) {
       return axios.post('http://localhost:4000/lists', {'name': name})
