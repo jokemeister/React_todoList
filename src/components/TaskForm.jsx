@@ -20,17 +20,33 @@ export const TaskForm = props => {
   const [desc, setDesc] = useState('');
   const [due_date, setDueDate] = useState('');
   const [list_id, setListId] = useState(1);
-  
+  const [btnText, setBtnText] = useState('Створити');
+  const [formTitle, setFormTitle] = useState('Створити нове завдання')
+
+    useEffect(() => {
+        if(formState === 'create') {
+            cleaner();
+            setBtnText('Створити');
+            setFormTitle('Створити нове завдання');
+        }
+        else {
+            setBtnText('Внести зміни');
+            setFormTitle('Внести зміни в завдання');
+        }
+
+    }, [formState])
+
   useEffect(() => {
     if (currentTask.name) {
         setName(currentTask.name);
         setDesc(currentTask.description);
         setDueDate(currentTask.due_date.split('T')[0]);
-        console.log(currentTask);
         setListId(currentTask.list_id ? currentTask.list_id : currentTask.list.id);
     }
     newTask.done = currentTask.done;
   }, [currentTask])
+
+
 
   const modalClass = () => {
     let modalClass = "addTask-modal";
@@ -71,20 +87,19 @@ export const TaskForm = props => {
     }
 
     function cleaner(e) {
-        if (!e.target.name.classList.contains('invalid')) {
+        if (!e?.target.name.classList.contains('invalid')) {
             setName('');
             setDesc('');
             setDueDate('');
             setListId(1);
-        } else return
-
+        } else return;
     }
 
   return (
     <div className={ modalClass() } onClick={ toggleModal }>
       <div className="addTask-modal-content" onClick={ (e) => e.stopPropagation() }>
           <div className="addTask-modal__header">
-              <p className="addTask-modal__title">Створити нове завдання</p>
+              <p className="addTask-modal__title">{ formTitle }</p>
               <button className="addTask-modal__close-btn cross-btn" onClick={ toggleModal }>
                   <ReactSVG beforeInjection={src => { src.classList.add('addTask-modal__close-btn__svg'); src.classList.add('cross-btn__svg') }} wrapper='span' src={ cross } />
               </button>
@@ -127,7 +142,7 @@ export const TaskForm = props => {
                 </label>
               
               <div className="addTask__form__btn-block">
-                  <button className="addTask__form__btn btn-blue btn" type="submit">Створити</button>
+                  <button className="addTask__form__btn btn-blue btn" type="submit">{ btnText }</button>
                   <button className="addTask-modal__close-btn addTask__form__btn btn-gray btn" type="button" onClick={ toggleModal }>Скасувати</button>
               </div>
           </form>

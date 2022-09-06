@@ -15,9 +15,11 @@ export const SingleTask = (props) => {
 
     const checkHandler = () => {
         updateTask(task.id, {done: !task.done})
+        .then(() => setCurrentTask(task));
     }
 
     function deleteHandler() {
+        console.log('delete in singleTask');
         deleteTask(task.id)
     }
 
@@ -58,12 +60,12 @@ export const SingleTask = (props) => {
                 </div>
                 <div className="task__body-right">
                     <button className="task__remove cross-btn" onClick={ deleteHandler }>
-                        <ReactSVG beforeInjection={src => { src.classList.add('task__remove-svg'); src.classList.add('cross-btn__svg') }} wrapper='span' src={ cross } />
+                        <ReactSVG beforeInjection={src => { src.classList.add('task__remove-svg'); src.classList.add('cross-btn__svg') }} wrapper='div' src={ cross } />
                     </button>
                     {
                         addBadge &&
-                        <NavLink className="task__body-badge" to={`/todo-list/${task.list.id}`}>
-                            {task.list.name}
+                        <NavLink className="task__body-badge" to={`/todo-list/${task.list?.id ? task.list.id : task.list_id}`}>
+                            {task.list?.name}
                         </NavLink>
                     }
                 </div>

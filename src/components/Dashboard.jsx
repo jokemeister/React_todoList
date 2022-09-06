@@ -8,6 +8,7 @@ import { Lists } from './Lists';
 
 import { ReactSVG } from 'react-svg';
 import cross from  '../assets/icons/cross.svg';
+import { TaskContext } from '../hoc/TaskProvider';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export const Dashboard = () => {
   const { setLists, currentList, setCurrentList } = useContext(ListsContext);
   const { oneList } = useContext(ListsContext);
   const { getDashboardReq } = useContext(RequestsContext)
+  const { currentTask } = useContext(TaskContext)
 
   useEffect(() => {
     getDashboardReq().then(dashboard => {
@@ -25,7 +27,7 @@ export const Dashboard = () => {
       setToday(dashboard.today);
       setActiveList(dashboard.lists);
     })
-  }, [location.pathname, oneList]);
+  }, [location.pathname, oneList, currentTask]);
 
   useEffect(() => {
     setActiveClass();
@@ -51,7 +53,6 @@ export const Dashboard = () => {
   }
 
   const clickHandler = (l) => {
-    console.log(l);
     if (l) {
       navigate(`/todo-list/${l.id}`)
     }

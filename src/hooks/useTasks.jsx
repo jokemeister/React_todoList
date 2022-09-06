@@ -17,6 +17,11 @@ export const useTasks = (endPoint) => {
     filterTasks(filterRule)
   }, [tasks, filterRule])
 
+  function getTasks(endPoint) {
+    getTasksReq(endPoint)
+      .then(setTasks)
+  }
+
   function filterTasks(rule) {
     if (rule === 'done') {
       setFilteredTasks(tasks.filter(t => t.done === true))
@@ -31,14 +36,16 @@ export const useTasks = (endPoint) => {
     createTaskReq(newTask)
       .then(getTasksReq(endPoint))
       .then(res => setTasks([...tasks, res]))
+      .then(() => getTasks(endPoint))
   }
 
   function updateTask(taskId, newValues) {
     return updateTaskReq(taskId, newValues)
-      .then(res => setTasks(tasks.map(t => t.id === res.id ? {...t, ...newValues} : t)))
+      .then(() => getTasks(endPoint))
   }
 
   function deleteTask(taskId) {
+    console.log('delete');
     return deleteTaskReq(taskId)
       .then(res => setTasks(tasks.filter(t => t.id !== res[0].id)))
   }
