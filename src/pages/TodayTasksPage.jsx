@@ -9,7 +9,7 @@ export const TodayTasksPage = () => {
     return (
         <div className="content show-all">
             <TaskForm createTask = { createTask } updateTask = { updateTask }/>
-            <Tasks filteredTasks = { filteredTasks } updateTask = { updateTask } deleteTask = { deleteTask }/>
+            <Tasks filteredTasks = { filteredTasks } updateTask = { updateTask } deleteTask = { deleteTask } addBadge = { true }/>
         </div>
     )
 }

@@ -634,5 +634,17 @@ main {
     .task__body-desc {
         font-size: 12px;
     }
+
+    .task__body-badge {
+        position: absolute;
+        font-size: 12px;
+        color: white;
+        font-weight: 600;
+        border-radius: 5px;
+        background-color: var(--blue-100);
+        padding: 5px;
+        right: 5px;
+        bottom: -30%;
+    }
 /* /content */
 /* /main */

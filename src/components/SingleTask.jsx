@@ -3,15 +3,15 @@ import { useContext } from 'react';
 import { ModalContext } from '../hoc/ModalProvider';
 import { TaskContext } from '../hoc/TaskProvider';
 
+import { ReactSVG } from 'react-svg';
+import calendar from '../assets/icons/calendar.svg';
+import cross from '../assets/icons/cross.svg';
+import { NavLink } from 'react-router-dom';
+
 export const SingleTask = (props) => {
-    const { task, updateTask, deleteTask } = props
+    const { task, updateTask, deleteTask, addBadge } = props
     const { setFormState, toggleModal } = useContext(ModalContext);
     const { setCurrentTask } = useContext(TaskContext);
-    
-    // task.due_date = typeof(task.due_date) === Date ? task.due_date : new Date(task.due_date);
-    // task.due_date = task.due_date === new Date('1970-01-01') ? '' : task.due_date;
-
-    console.log(typeof(task.due_date));
 
     const checkHandler = () => {
         updateTask(task.id, {done: !task.done})
@@ -31,7 +31,6 @@ export const SingleTask = (props) => {
             className += ' done';
         }
         else if (task.due_date < today && task.due_date !== '' && task.due_date !== null) {
-            console.log(task.due_date);
             className += ' overdue';
         }
         return className;
@@ -48,10 +47,7 @@ export const SingleTask = (props) => {
     return (
         <div className={ setClass() } onContextMenu={ updateClickHandler }>
             <span className="task__deadline">
-                <svg className="task__deadline-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M4.6665 1.16663V3.49996M9.33317 1.16663V3.49996M1.1665 5.83329H12.8332" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <ReactSVG wrapper='span' beforeInjection={ svg => svg.classList.add("task__deadline-svg")} src={ calendar } />
                 <p className="task__deadline-date">{ task.due_date ? task.due_date.split('T')[0] : task.due_date } </p>
             </span>
             <label className="task__body">
@@ -60,11 +56,17 @@ export const SingleTask = (props) => {
                     <p className="task__body-title">{ task.name }</p>
                     <p className="task__body-desc">{ task.description }</p>
                 </div>
-                <button className="task__remove cross-btn" onClick={ deleteHandler }>
-                    <svg className="task__remove-svg cross-btn__svg" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 348.3 348.3" xmlSpace="preserve" enableBackground="new 0 0 348.333 348.334" fill="currentColor">
-                        <path d="M336.6 68.6 231 174.2l105.6 105.5a40.2 40.2 0 0 1-56.9 56.9L174.2 231 68.6 336.6a40 40 0 0 1-56.8 0 40.2 40.2 0 0 1 0-56.9l105.5-105.5L11.8 68.6a40.2 40.2 0 0 1 56.8-56.8l105.6 105.5L279.7 11.8a40.2 40.2 0 0 1 56.9 56.8z"/>
-                    </svg>
-                </button>
+                <div className="task__body-right">
+                    <button className="task__remove cross-btn" onClick={ deleteHandler }>
+                        <ReactSVG beforeInjection={src => { src.classList.add('task__remove-svg'); src.classList.add('cross-btn__svg') }} wrapper='span' src={ cross } />
+                    </button>
+                    {
+                        addBadge &&
+                        <NavLink className="task__body-badge" to={`/todo-list/${task.list.id}`}>
+                            {task.list.name}
+                        </NavLink>
+                    }
+                </div>
             </label>
         </div>
     )

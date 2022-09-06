@@ -5,6 +5,12 @@ import { ModalContext } from "../hoc/ModalProvider";
 import { TaskContext } from "../hoc/TaskProvider";
 import { Lists } from "./Lists";
 
+import { ReactSVG } from 'react-svg';
+import cross from '../assets/icons/cross.svg';
+import clock from '../assets/icons/clock.svg';
+import book from '../assets/icons/book.svg';
+import list from '../assets/icons/list.svg';
+
 export const TaskForm = props => {
 
   const { createTask, updateTask } = props;
@@ -16,11 +22,11 @@ export const TaskForm = props => {
   const [list_id, setListId] = useState(1);
   
   useEffect(() => {
-    if(currentTask) console.log('it is', currentTask);
     if (currentTask.name) {
         setName(currentTask.name);
         setDesc(currentTask.description);
-        setDueDate(currentTask.due_date.toISOString().split('T')[0]);
+        setDueDate(currentTask.due_date.split('T')[0]);
+        console.log(currentTask);
         setListId(currentTask.list_id ? currentTask.list_id : currentTask.list.id);
     }
     newTask.done = currentTask.done;
@@ -48,14 +54,8 @@ export const TaskForm = props => {
         if (!formValidation(e)) return;
 
         if (formState === 'create') {
-            console.log(name);
-            console.log(desc);
-            console.log(due_date);
-            console.log(list_id);
-            console.log('create', newTask);
             return createTask(newTask);
         } else {
-            console.log('update', newTask);
             return updateTask(currentTask.id, newTask);
         }
 
@@ -86,18 +86,13 @@ export const TaskForm = props => {
           <div className="addTask-modal__header">
               <p className="addTask-modal__title">Створити нове завдання</p>
               <button className="addTask-modal__close-btn cross-btn" onClick={ toggleModal }>
-                  <svg className="addTask-modal__close-btn__svg cross-btn__svg" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 348.3 348.3" xmlSpace="preserve" enableBackground="new 0 0 348.333 348.334" fill="currentColor">
-                      <path d="M336.6 68.6 231 174.2l105.6 105.5a40.2 40.2 0 0 1-56.9 56.9L174.2 231 68.6 336.6a40 40 0 0 1-56.8 0 40.2 40.2 0 0 1 0-56.9l105.5-105.5L11.8 68.6a40.2 40.2 0 0 1 56.8-56.8l105.6 105.5L279.7 11.8a40.2 40.2 0 0 1 56.9 56.8z"/>
-                  </svg>
+                  <ReactSVG beforeInjection={src => { src.classList.add('addTask-modal__close-btn__svg'); src.classList.add('cross-btn__svg') }} wrapper='span' src={ cross } />
               </button>
           </div>
           <form className="addTask__form" name="addTask" onSubmit={ e => { submitHandler(e); cleaner(e) }} >
               <label className="addTask__form__deadline-label">
                   <p>
-                      <svg className="addTask__form__deadline-label__svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <circle cx="7" cy="7" r="6.35" stroke="#262837" strokeWidth="1.3"/>
-                          <path d="M8 3V6.75V8H4" stroke="#262837" strokeWidth="1.4" strokeLinejoin="round"/>
-                      </svg>
+                      <ReactSVG beforeInjection={src => src.classList.add('addTask__form__deadline-label__svg') } wrapper='span' src={ clock } />
                       Термін виконання
                   </p>
                   <input className="addTask__form__deadline-input" type="text" placeholder="2022-08-28" name="due_date" value={ due_date } onChange={ e => setDueDate(e.target.value) } />
@@ -106,12 +101,7 @@ export const TaskForm = props => {
     
               <label className="addTask__form__name-label">
                   <p>
-                      <svg className="addTask__form__name-label__svg" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="0.5" y="0.5" width="11" height="11" rx="1.5" stroke="#262837" strokeLinejoin="round"/>
-                          <path d="M11.1431 8.57129H0.857422V11.1427H11.1431V8.57129Z" fill="#262837" stroke="#262837" strokeLinecap="round" strokeLinejoin="round"/>
-                          <circle cx="10.7137" cy="9.85728" r="0.428571" fill="white"/>
-                          <path d="M1.28516 9.85693H7.71373" stroke="white" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>    
+                      <ReactSVG beforeInjection={src => src.classList.add('addTask__form__name-label__svg') } wrapper='span' src={ book } />
                       Назва завдання
                   </p>
                   <input className="addTask__form__name-input" type="text" placeholder="Зробити якусь справу" name="name" value={ name } onChange={ e => setName(e.target.value) } />
@@ -120,10 +110,7 @@ export const TaskForm = props => {
     
               <label className="addTask__form__desc-label">
                   <p>
-                      <svg className="addTask__form__desc-label__svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M1 2H6.7H13" stroke="#262837" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M1 4.5H13M1 7H13M1 9.5H13M1 12C1.48 12 6.8 12 9.4 12" stroke="#262837" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                      <ReactSVG beforeInjection={src => src.classList.add('addTask__form__desc-label__svg') } wrapper='span' src={ list } />
                       Опис
                   </p>
                   <textarea className="addTask__form__desc-input" placeholder="Зробити і те, і інше" name="description" value={ desc } onChange={ e => setDesc(e.target.value) } ></textarea>
@@ -131,10 +118,7 @@ export const TaskForm = props => {
 
               <label className="addTask__form__list-label">
                     <p>
-                        <svg className="addTask__form__list-label__svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 2H6.7H13" stroke="#262837" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M1 4.5H13M1 7H13M1 9.5H13M1 12C1.48 12 6.8 12 9.4 12" stroke="#262837" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
+                        <ReactSVG beforeInjection={src => src.classList.add('addTask__form__list-label__svg') } wrapper='span' src={ list } />
                         Список
                     </p>
                     <select className="addTask__form__list-selector" name="list_id" value={ list_id } onChange={ e => setListId(e.target.value) } >

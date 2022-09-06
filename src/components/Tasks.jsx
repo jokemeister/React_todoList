@@ -3,11 +3,10 @@ import React from 'react';
 import { SingleTask } from './SingleTask';
 
 export const Tasks = props => {
-    const { filteredTasks, updateTask, deleteTask } = props;
+    const { filteredTasks, updateTask, deleteTask, addBadge } = props;
 
     return (
         <>
-        {console.log('tasks', filteredTasks)}
             {   
                 filteredTasks && filteredTasks.map(t => 
                     <SingleTask 
@@ -15,6 +14,7 @@ export const Tasks = props => {
                         task = { t }
                         updateTask = { updateTask }
                         deleteTask = { deleteTask }
+                        addBadge = { addBadge }
                     />
                 ) 
             }

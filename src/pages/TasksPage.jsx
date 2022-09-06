@@ -5,7 +5,6 @@ import { useTasks } from '../hooks/useTasks';
 
 export const TasksPage = () => {
     const { filteredTasks, createTask, updateTask, deleteTask } = useTasks('http://localhost:4000/tasks');
-    console.log('fuck', filteredTasks);
 
     return (
         <div className="content show-all">

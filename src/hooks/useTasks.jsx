@@ -11,7 +11,7 @@ export const useTasks = (endPoint) => {
   useEffect(() => {
     getTasksReq(endPoint)
       .then(setTasks)
-  }, [])
+  }, [endPoint])
 
   useEffect(() => {
     filterTasks(filterRule)

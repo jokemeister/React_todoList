@@ -4,6 +4,9 @@ import { ModalContext } from "../hoc/ModalProvider";
 import { FilterContext } from '../hoc/FilterProvider';
 import { ListsContext } from '../hoc/ListsProvider';
 
+import menu from '../assets/icons/menu.svg';
+import { ReactSVG } from 'react-svg';
+
 export const Header = () => {
     const { setFormState, toggleModal } = useContext(ModalContext);
     const { setFilterRule } = useContext(FilterContext);
@@ -23,9 +26,7 @@ export const Header = () => {
     return (
         <div className="header">
             <span className="header__top">
-                <svg className="header__top__menu" viewBox="0 0 12 10" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 1H12M12 5H0M12 9H0" stroke="#262837" strokeWidth="1.5"/>
-                </svg>
+                <ReactSVG beforeInjection={ src => src.classList.add("header__top__menu") } wrapper='span' src={ menu } />
                 <h1 className="header__top__title">{ currentList }</h1>
             </span>
             <p className="header__bot-text">Обраний список завдань</p>
