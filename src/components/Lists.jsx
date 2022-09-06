@@ -1,11 +1,10 @@
 import React from 'react';
 import { SingleList } from './SingleList';
-import { ListsContext } from '../hoc/ListsProvider';
-import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 
 export const Lists = props => {
     const { clickHandler } = props;
-    const { lists } = useContext(ListsContext);
+    const lists = useSelector(state => state.dashboard.lists);
 
     return (
       <>

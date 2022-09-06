@@ -1,12 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { FilterContext } from '../hoc/FilterProvider';
+import React, { useContext, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RequestsContext } from '../hoc/RequestsProvider';
 
 export const useTasks = (endPoint) => {
   const { getTasksReq, createTaskReq, updateTaskReq, deleteTaskReq } = useContext(RequestsContext);
-  const [ tasks, setTasks ] = useState([]);
-  const [ filteredTasks, setFilteredTasks ] = useState([]);
-  const { filterRule } = useContext(FilterContext);
+  const tasks = useSelector(state => state.tasks.tasks);
+  const filteredTasks = useSelector(state => state.tasks.filteredTasks);
+  const filterRule = useSelector(state => state.tasks.filterRule);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getTasksReq(endPoint)
@@ -30,6 +31,14 @@ export const useTasks = (endPoint) => {
     } else {
       setFilteredTasks(tasks)
     }
+  }
+ 
+  function setTasks(array) {
+    dispatch({type: "SET_TASKS", payload: array})
+  }
+
+  function setFilteredTasks(array) {
+    dispatch({type: "SET_FILTERED_TASKS", payload: array})
   }
 
   function createTask(newTask) {

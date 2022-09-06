@@ -1,12 +1,24 @@
 import { combineReducers } from 'redux'
 import { DASHBOARD_LOADED } from './actions'
 
-function openedTasksReducer(state = {}, action) {
-    // ...
+const defaultState = {
+  today: 0,
+  lists: [],
+  currentList: 'Усі завдання',
+  newList: ''
 }
 
-export default combineReducers({
-    today: (today = 0, {type, payload}) => type === DASHBOARD_LOADED ? payload.today : today,
-    lists: (lists = [], {type, payload}) => type === DASHBOARD_LOADED ? payload.lists : lists,
-    openedTasks: openedTasksReducer
-})
+export function dashboardReducer(state = defaultState, action) {
+  switch (action.type) {
+    case "SET_TODAY":
+      return {...state, today: action.payload};
+    case "SET_LISTS":
+      return {...state, lists: action.payload};
+    case "SET_CURRENT_LIST":
+      return {...state, currentList: action.payload};
+    case "SET_NEW_LIST":
+      return {...state, newList: action.payload};
+    default: 
+      return state;
+  };
+}

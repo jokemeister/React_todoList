@@ -2,7 +2,6 @@ import React, { useContext }  from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { ModalContext } from "../hoc/ModalProvider";
-import { TaskContext } from "../hoc/TaskProvider";
 import { Lists } from "./Lists";
 
 import { ReactSVG } from 'react-svg';
@@ -10,12 +9,13 @@ import cross from '../assets/icons/cross.svg';
 import clock from '../assets/icons/clock.svg';
 import book from '../assets/icons/book.svg';
 import list from '../assets/icons/list.svg';
+import { useSelector } from "react-redux";
 
 export const TaskForm = props => {
 
   const { createTask, updateTask } = props;
   const { modalState, toggleModal, formState } = useContext(ModalContext);
-  const { currentTask } = useContext(TaskContext);
+  const currentTask = useSelector(state => state.tasks.currentTask);
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [due_date, setDueDate] = useState('');

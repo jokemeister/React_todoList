@@ -1,25 +1,40 @@
 import React, { useContext } from 'react';
-import { useState } from 'react';
 import { useEffect } from 'react';
 import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ListsContext } from '../hoc/ListsProvider';
 import { RequestsContext } from '../hoc/RequestsProvider';
 import { Lists } from './Lists';
 
 import { ReactSVG } from 'react-svg';
 import cross from  '../assets/icons/cross.svg';
-import { TaskContext } from '../hoc/TaskProvider';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Dashboard = () => {
+  // ROUTER
   const navigate = useNavigate();
   const location = useLocation();
   let { listId } = useParams();
   listId = parseInt(listId)
-  const [today, setToday] = useState([]);
-  const { setLists, currentList, setCurrentList } = useContext(ListsContext);
-  const { oneList } = useContext(ListsContext);
+  // /ROUTER
   const { getDashboardReq } = useContext(RequestsContext)
-  const { currentTask } = useContext(TaskContext)
+  // REDUX 
+  const dispatch = useDispatch();
+  const today = useSelector(state => state.dashboard.today);
+  const currentList = useSelector(state => state.dashboard.currentList);
+  const newList = useSelector(state => state.dashboard.newList);
+  const currentTask = useSelector(state => state.tasks.currentTask);
+  // /REDUX
+
+  function setToday(count) {
+    dispatch({type:"SET_TODAY", payload: count})
+  }
+
+  function setLists(array) {
+    dispatch({type:"SET_LISTS", payload: array})
+  }
+
+  function setCurrentList(listName) {
+    dispatch({type:"SET_CURRENT_LIST", payload: listName})
+  }
 
   useEffect(() => {
     getDashboardReq().then(dashboard => {
@@ -27,7 +42,7 @@ export const Dashboard = () => {
       setToday(dashboard.today);
       setActiveList(dashboard.lists);
     })
-  }, [location.pathname, oneList, currentTask]);
+  }, [location.pathname, newList, currentTask]);
 
   useEffect(() => {
     setActiveClass();
@@ -43,7 +58,7 @@ export const Dashboard = () => {
     };
   };
 
-  function setActiveClass(){
+  function setActiveClass() {
     const listItems = document.querySelectorAll('.sidebar__list-item');
     listItems.forEach(item => {
       item.classList.remove('is-active');

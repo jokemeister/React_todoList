@@ -1,23 +1,24 @@
 import React from 'react';
 import { useContext } from "react";
 import { ModalContext } from "../hoc/ModalProvider";
-import { FilterContext } from '../hoc/FilterProvider';
-import { ListsContext } from '../hoc/ListsProvider';
 
 import menu from '../assets/icons/menu.svg';
 import { ReactSVG } from 'react-svg';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Header = () => {
+    const dispatch = useDispatch();
     const { setFormState, toggleModal } = useContext(ModalContext);
-    const { setFilterRule } = useContext(FilterContext);
-    const { currentList } = useContext(ListsContext);
+    const currentList = useSelector(state => state.dashboard.currentList)
 
     const makeActive = (e) => {
         const navLinks = document.querySelectorAll('.header__nav-link');
         navLinks.forEach(link => link.classList.remove('is-active'));
         e.target.classList.add('is-active');
     };
-
+    function setFilterRule(rule) {
+        dispatch({type: "SET_FILTER_RULE", payload: rule})
+    }
     function openClickHandler() {
         setFormState('create');  
         toggleModal();

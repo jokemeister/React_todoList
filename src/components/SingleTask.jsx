@@ -1,17 +1,17 @@
 import React from 'react';
 import { useContext } from 'react';
 import { ModalContext } from '../hoc/ModalProvider';
-import { TaskContext } from '../hoc/TaskProvider';
 
 import { ReactSVG } from 'react-svg';
 import calendar from '../assets/icons/calendar.svg';
 import cross from '../assets/icons/cross.svg';
 import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 export const SingleTask = (props) => {
     const { task, updateTask, deleteTask, addBadge } = props
     const { setFormState, toggleModal } = useContext(ModalContext);
-    const { setCurrentTask } = useContext(TaskContext);
+    const dispatch = useDispatch();
 
     const checkHandler = () => {
         updateTask(task.id, {done: !task.done})
@@ -19,8 +19,11 @@ export const SingleTask = (props) => {
     }
 
     function deleteHandler() {
-        console.log('delete in singleTask');
-        deleteTask(task.id)
+        deleteTask(task.id)  
+    }
+
+    function setCurrentTask(task) {
+        dispatch({type: "SET_CURRENT_TASK", payload: task})
     }
 
     const setClass = () => {

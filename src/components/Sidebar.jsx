@@ -1,22 +1,24 @@
 import React from 'react';
 import { useState } from 'react';
 import { useContext } from 'react';
-import { ListsContext } from '../hoc/ListsProvider';
 import { RequestsContext } from '../hoc/RequestsProvider';
 import { Dashboard } from './Dashboard';
 
 import { ReactSVG } from 'react-svg';
 import logo from '../assets/icons/logo.svg';
 import exit from  '../assets/icons/exit.svg';
+import { useDispatch } from 'react-redux';
 
 export const Sidebar = () => {
     const { createListReq } = useContext(RequestsContext);
-    const { setOneList } = useContext(ListsContext);
     const [listName, setListName] = useState('');
+    const dispatch = useDispatch();
     function createNewList(e) {
         e.preventDefault();
-        createListReq(listName).then(setOneList);
+        createListReq(listName).then(list => dispatch({type:"SET_NEW_LIST", payload: list}));
+        
     }
+
     return (
         <aside className="sidebar">
             <div className="sidebar__header">
