@@ -1,7 +1,6 @@
-import React, { useContext }  from "react";
+import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { ModalContext } from "../hoc/ModalProvider";
 import { Lists } from "./Lists";
 
 import { ReactSVG } from 'react-svg';
@@ -9,12 +8,12 @@ import cross from '../assets/icons/cross.svg';
 import clock from '../assets/icons/clock.svg';
 import book from '../assets/icons/book.svg';
 import list from '../assets/icons/list.svg';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setModalState } from "../store/modal/actions";
 
 export const TaskForm = props => {
 
   const { createTask, updateTask } = props;
-  const { modalState, toggleModal, formState } = useContext(ModalContext);
   const currentTask = useSelector(state => state.tasks.currentTask);
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
@@ -22,6 +21,14 @@ export const TaskForm = props => {
   const [list_id, setListId] = useState(1);
   const [btnText, setBtnText] = useState('Створити');
   const [formTitle, setFormTitle] = useState('Створити нове завдання')
+
+  const modalState = useSelector(state => state.modal.modalState)
+  const formState = useSelector(state => state.modal.formState)
+  const dispatch = useDispatch();
+
+  function toggleModal() {
+    dispatch(setModalState(!modalState));
+  };
 
     useEffect(() => {
         if(formState === 'create') {
@@ -70,7 +77,7 @@ export const TaskForm = props => {
         if (!formValidation(e)) return;
 
         if (formState === 'create') {
-            return createTask(newTask);
+            return createTask(newTask)
         } else {
             return updateTask(currentTask.id, newTask);
         }

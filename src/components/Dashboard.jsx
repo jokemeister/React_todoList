@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useEffect } from 'react';
 import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { RequestsContext } from '../hoc/RequestsProvider';
 import { Lists } from './Lists';
 
 import { ReactSVG } from 'react-svg';
 import cross from  '../assets/icons/cross.svg';
 import { useDispatch, useSelector } from 'react-redux';
+import { loadDashboard, setCurrentList } from '../store/dashboardReducer';
 
 export const Dashboard = () => {
   // ROUTER
@@ -15,34 +15,23 @@ export const Dashboard = () => {
   let { listId } = useParams();
   listId = parseInt(listId)
   // /ROUTER
-  const { getDashboardReq } = useContext(RequestsContext)
+
   // REDUX 
   const dispatch = useDispatch();
   const today = useSelector(state => state.dashboard.today);
+  const lists = useSelector(state => state.dashboard.lists);
   const currentList = useSelector(state => state.dashboard.currentList);
   const newList = useSelector(state => state.dashboard.newList);
   const currentTask = useSelector(state => state.tasks.currentTask);
   // /REDUX
 
-  function setToday(count) {
-    dispatch({type:"SET_TODAY", payload: count})
-  }
-
-  function setLists(array) {
-    dispatch({type:"SET_LISTS", payload: array})
-  }
-
-  function setCurrentList(listName) {
-    dispatch({type:"SET_CURRENT_LIST", payload: listName})
-  }
+  useEffect(() => {
+    dispatch(loadDashboard);
+  }, [newList]);
 
   useEffect(() => {
-    getDashboardReq().then(dashboard => {
-      setLists(dashboard.lists);
-      setToday(dashboard.today);
-      setActiveList(dashboard.lists);
-    })
-  }, [location.pathname, newList, currentTask]);
+    lists[0] && setActiveList(lists);
+  }, [lists, location.pathname]);
 
   useEffect(() => {
     setActiveClass();
@@ -50,11 +39,11 @@ export const Dashboard = () => {
 
   function setActiveList(lists) {
     if (location.pathname === '/today') {
-     setCurrentList('На сьогодні');
+      dispatch(setCurrentList('На сьогодні'))
     } else if (location.pathname === '/tasks') {
-     setCurrentList('Усі завдання');
+      dispatch(setCurrentList('Усі завдання'))
     } else {
-     setCurrentList(lists.filter(l => l.id === listId)[0].name);
+      dispatch(setCurrentList(lists.filter(l => l.id === listId)[0].name))
     };
   };
 

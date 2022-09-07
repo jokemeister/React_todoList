@@ -1,9 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { SingleTask } from './SingleTask';
 
 export const Tasks = props => {
-    const { filteredTasks, updateTask, deleteTask, addBadge } = props;
+    const { updateTask, deleteTask, addBadge } = props;
+    const filteredTasks = useSelector(state => state.tasks.filteredTasks);
 
     return (
         <>

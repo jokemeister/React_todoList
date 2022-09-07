@@ -1,23 +1,17 @@
-import { combineReducers, applyMiddleware, createStore } from 'redux';
+import { combineReducers, applyMiddleware, createStore, compose } from 'redux';
 import thunk from 'redux-thunk';
 
-import { dashboardReducer } from './dashboard/reducer.js';
-import { tasksReducer } from './tasks/reducer.js';
+import { dashboardReducer } from './dashboardReducer';
+import { modalReducer } from './modal/reducer.js';
+import { tasksReducer } from './tasksReducer';
 
 const rootReducer = combineReducers({
     dashboard: dashboardReducer,
-    tasks: tasksReducer
-})
+    tasks: tasksReducer,
+    modal: modalReducer
+});
 
-const store = createStore(
-  rootReducer,
-  applyMiddleware(thunk)
-  // localStorage.state && JSON.parse(localStorage.state),
-  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
-
-// store.subscribe(() => {
-//   localStorage.setItem('state', JSON.stringify(store.getState()))
-// });
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
 export default store;

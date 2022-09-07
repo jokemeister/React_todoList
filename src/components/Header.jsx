@@ -1,28 +1,35 @@
 import React from 'react';
-import { useContext } from "react";
-import { ModalContext } from "../hoc/ModalProvider";
 
-import menu from '../assets/icons/menu.svg';
-import { ReactSVG } from 'react-svg';
 import { useDispatch, useSelector } from 'react-redux';
+import { setFormState, setModalState } from '../store/modal/actions';
+
+import { ReactSVG } from 'react-svg';
+import menu from '../assets/icons/menu.svg';
 
 export const Header = () => {
     const dispatch = useDispatch();
-    const { setFormState, toggleModal } = useContext(ModalContext);
     const currentList = useSelector(state => state.dashboard.currentList)
+    const modalState = useSelector(state => state.modal.modalState)
 
-    const makeActive = (e) => {
+    function makeActive(e) {
         const navLinks = document.querySelectorAll('.header__nav-link');
         navLinks.forEach(link => link.classList.remove('is-active'));
         e.target.classList.add('is-active');
     };
+
     function setFilterRule(rule) {
         dispatch({type: "SET_FILTER_RULE", payload: rule})
-    }
+    };
+
     function openClickHandler() {
-        setFormState('create');  
+        dispatch(setFormState('create'));
         toggleModal();
-    }
+    };
+
+    function toggleModal() {
+        console.log(modalState);
+        dispatch(setModalState(!modalState));
+    };
 
     return (
         <div className="header">

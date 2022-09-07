@@ -1,21 +1,21 @@
 import React from 'react';
 import { useContext } from 'react';
-import { ModalContext } from '../hoc/ModalProvider';
-
 import { ReactSVG } from 'react-svg';
 import calendar from '../assets/icons/calendar.svg';
 import cross from '../assets/icons/cross.svg';
 import { NavLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFormState, setModalState } from '../store/modal/actions';
 
 export const SingleTask = (props) => {
     const { task, updateTask, deleteTask, addBadge } = props
-    const { setFormState, toggleModal } = useContext(ModalContext);
-    const dispatch = useDispatch();
 
-    const checkHandler = () => {
+    const dispatch = useDispatch();
+    const modalState = useSelector(state => state.modal.modalState);
+    const formState = useSelector(state => state.modal.formState);
+
+    function checkHandler () {
         updateTask(task.id, {done: !task.done})
-        .then(() => setCurrentTask(task));
     }
 
     function deleteHandler() {
@@ -24,6 +24,10 @@ export const SingleTask = (props) => {
 
     function setCurrentTask(task) {
         dispatch({type: "SET_CURRENT_TASK", payload: task})
+    }
+
+    function toggleModal() {
+        dispatch(setModalState(!modalState))
     }
 
     const setClass = () => {
@@ -44,7 +48,7 @@ export const SingleTask = (props) => {
     function updateClickHandler(e) {
         e.preventDefault();
         e.stopPropagation();
-        setFormState('update');
+        dispatch(setFormState('update'))
         setCurrentTask(task);  
         toggleModal();
     }

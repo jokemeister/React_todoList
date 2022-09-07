@@ -1,66 +1,44 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RequestsContext } from '../hoc/RequestsProvider';
+import { loadTasks, setFilteredTasks, createNewTask, updateOneTask, deleteOneTask } from '../store/tasksReducer';
 
 export const useTasks = (endPoint) => {
-  const { getTasksReq, createTaskReq, updateTaskReq, deleteTaskReq } = useContext(RequestsContext);
   const tasks = useSelector(state => state.tasks.tasks);
-  const filteredTasks = useSelector(state => state.tasks.filteredTasks);
   const filterRule = useSelector(state => state.tasks.filterRule);
+  const newTask = useSelector(state => state.tasks.newTask);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getTasksReq(endPoint)
-      .then(setTasks)
-  }, [endPoint])
+    dispatch(loadTasks(endPoint))
+  }, [endPoint, newTask])
 
   useEffect(() => {
     filterTasks(filterRule)
   }, [tasks, filterRule])
 
-  function getTasks(endPoint) {
-    getTasksReq(endPoint)
-      .then(setTasks)
-  }
-
   function filterTasks(rule) {
     if (rule === 'done') {
-      setFilteredTasks(tasks.filter(t => t.done === true))
+      dispatch(setFilteredTasks(tasks.filter(t => t.done === true)))
     } else if (rule === 'unDone') {
-      setFilteredTasks(tasks.filter(t => t.done === false))
+      dispatch(setFilteredTasks(tasks.filter(t => t.done === false)))
     } else {
-      setFilteredTasks(tasks)
+      dispatch(setFilteredTasks(tasks))
     }
-  }
- 
-  function setTasks(array) {
-    dispatch({type: "SET_TASKS", payload: array})
-  }
-
-  function setFilteredTasks(array) {
-    dispatch({type: "SET_FILTERED_TASKS", payload: array})
   }
 
   function createTask(newTask) {
-    createTaskReq(newTask)
-      .then(getTasksReq(endPoint))
-      .then(res => setTasks([...tasks, res]))
-      .then(() => getTasks(endPoint))
+    dispatch(createNewTask(newTask));
   }
 
   function updateTask(taskId, newValues) {
-    return updateTaskReq(taskId, newValues)
-      .then(() => getTasks(endPoint))
+    dispatch(updateOneTask(taskId, newValues));
   }
 
   function deleteTask(taskId) {
-    console.log('delete');
-    return deleteTaskReq(taskId)
-      .then(res => setTasks(tasks.filter(t => t.id !== res[0].id)))
+    dispatch(deleteOneTask(taskId));
   }
 
   return {
-    filteredTasks,
     createTask,
     updateTask,
     deleteTask
