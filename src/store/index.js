@@ -2,7 +2,7 @@ import { combineReducers, applyMiddleware, createStore, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import { dashboardReducer } from './dashboardReducer';
-import { modalReducer } from './modal/reducer.js';
+import { modalReducer } from './modalReducer';
 import { tasksReducer } from './tasksReducer';
 
 const rootReducer = combineReducers({

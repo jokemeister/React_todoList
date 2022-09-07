@@ -10,6 +10,7 @@ export const SingleList = props => {
         return (
             <li className="sidebar__list-item" onClick={() => clickHandler(l)}>
                 <span className="sidebar__list-item__title">{ l.name }</span>
+                <span> ({l.undone}) </span>
                 <button className="list__remove cross-btn" onClick={ e => {e.stopPropagation(); console.log('delete list', l)} }> 
                     <ReactSVG beforeInjection={src => { src.classList.add('list__remove-svg'); src.classList.add('cross-btn__svg') }} wrapper='span' src={ cross } />
                 </button>

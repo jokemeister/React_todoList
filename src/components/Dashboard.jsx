@@ -22,12 +22,16 @@ export const Dashboard = () => {
   const lists = useSelector(state => state.dashboard.lists);
   const currentList = useSelector(state => state.dashboard.currentList);
   const newList = useSelector(state => state.dashboard.newList);
+  const newChanges = useSelector(state => state.tasks.newChanges);
   const currentTask = useSelector(state => state.tasks.currentTask);
   // /REDUX
 
   useEffect(() => {
     dispatch(loadDashboard);
   }, [newList]);
+  useEffect(() => {
+    dispatch(loadDashboard);
+  }, [newChanges]);
 
   useEffect(() => {
     lists[0] && setActiveList(lists);

@@ -5,7 +5,7 @@ import calendar from '../assets/icons/calendar.svg';
 import cross from '../assets/icons/cross.svg';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFormState, setModalState } from '../store/modal/actions';
+import { setFormState, setModalState } from '../store/modalReducer';
 
 export const SingleTask = (props) => {
     const { task, updateTask, deleteTask, addBadge } = props

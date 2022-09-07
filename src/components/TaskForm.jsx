@@ -8,8 +8,9 @@ import cross from '../assets/icons/cross.svg';
 import clock from '../assets/icons/clock.svg';
 import book from '../assets/icons/book.svg';
 import list from '../assets/icons/list.svg';
+
 import { useDispatch, useSelector } from "react-redux";
-import { setModalState } from "../store/modal/actions";
+import { setModalState } from "../store/modalReducer";
 
 export const TaskForm = props => {
 

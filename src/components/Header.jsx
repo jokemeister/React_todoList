@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setFormState, setModalState } from '../store/modal/actions';
+import { setFormState, setModalState } from '../store/modalReducer';
 
 import { ReactSVG } from 'react-svg';
 import menu from '../assets/icons/menu.svg';

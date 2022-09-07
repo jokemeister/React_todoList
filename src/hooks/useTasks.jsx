@@ -5,12 +5,12 @@ import { loadTasks, setFilteredTasks, createNewTask, updateOneTask, deleteOneTas
 export const useTasks = (endPoint) => {
   const tasks = useSelector(state => state.tasks.tasks);
   const filterRule = useSelector(state => state.tasks.filterRule);
-  const newTask = useSelector(state => state.tasks.newTask);
+  const newChanges = useSelector(state => state.tasks.newChanges);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(loadTasks(endPoint))
-  }, [endPoint, newTask])
+  }, [endPoint, newChanges])
 
   useEffect(() => {
     filterTasks(filterRule)

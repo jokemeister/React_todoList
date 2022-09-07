@@ -25,7 +25,7 @@ import axios from 'axios';
       .then(newTask => { 
         console.log(newTask);
         dispatch({
-          type: "SET_NEW_TASK",
+          type: "SET_CHANGES",
           payload: newTask
         }); 
       })
@@ -36,10 +36,10 @@ import axios from 'axios';
     console.log(taskId);
     return axios.delete(`http://localhost:4000/tasks/${taskId}`)
       .then(res => res.data)
-      .then(newTask => { 
+      .then(deletedTask => { 
         dispatch({
-          type: "SET_NEW_TASK",
-          payload: newTask
+          type: "SET_CHANGES",
+          payload: deletedTask
         }); 
       })
       .catch(err => { throw new Error(err) })
@@ -49,10 +49,10 @@ import axios from 'axios';
     console.log(taskId, newValues);
     return axios.patch(`http://localhost:4000/tasks/${taskId}`, newValues)
       .then(res => res.data)
-      .then(newTask => { 
+      .then(updatedTask => { 
         dispatch({
-          type: "SET_NEW_TASK",
-          payload: newTask
+          type: "SET_CHANGES",
+          payload: updatedTask
         }); 
       })
       .catch(err => { throw new Error(err) })
@@ -67,7 +67,7 @@ import axios from 'axios';
     filteredTasks: (filteredTasks = [], {type, payload}) => type === "SET_FILTERED_TASKS" ? payload : filteredTasks,
     filterRule: (filterRule = 'all', {type, payload}) => type === "SET_FILTER_RULE" ? payload : filterRule,
     currentTask: (currentTask = {}, {type, payload}) => type === "SET_CURRENT_TASK" ? payload : currentTask,
-    newTask: (newTask = '', {type, payload}) => type === "SET_NEW_TASK" ? payload : newTask,
+    tasksChanges: (newChanges = '', {type, payload}) => type === "SET_CHANGES" ? payload : newChanges,
   })
 
 // /REDUCERS
