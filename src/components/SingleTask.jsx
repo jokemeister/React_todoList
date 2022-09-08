@@ -1,11 +1,13 @@
 import React from 'react';
-import { useContext } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { setFormState, setModalState } from '../store/modalReducer';
+
+import { NavLink } from 'react-router-dom';
+
 import { ReactSVG } from 'react-svg';
 import calendar from '../assets/icons/calendar.svg';
 import cross from '../assets/icons/cross.svg';
-import { NavLink } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { setFormState, setModalState } from '../store/modalReducer';
 
 export const SingleTask = (props) => {
     const { task, updateTask, deleteTask, addBadge } = props

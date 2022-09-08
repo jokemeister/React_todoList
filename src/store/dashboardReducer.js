@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux'
 import axios from 'axios';
 
 // ACTIONS
@@ -19,7 +18,7 @@ import axios from 'axios';
       .then(res => res.data)
       .then(newList => {
         dispatch({
-          type: "SET_NEW_LIST",
+          type: "CREATE_LIST",
           payload: newList
         })
       })
@@ -29,19 +28,46 @@ import axios from 'axios';
   export const deleteList = listId => dispatch => {
     return axios.delete(`http://localhost:4000/lists/${listId}`)
       .then(res => res.data)
+      .then(deletedList => {
+        dispatch({
+          type: "DELETE_LIST",
+          payload: deletedList[0]
+        })
+      })
       .catch(err => {throw new Error(err)})
   }
 
   export const setCurrentList = (payload) => ({type: "SET_CURRENT_LIST", payload});
-  export const setNewList = (payload) => ({type: "SET_NEW_LIST", payload});
+
 // /ACTIONS
 
 // REDUCERS
 
-  export const dashboardReducer = combineReducers({
-    today: (today = 0, {type, payload}) => type === "DASHBOARD_LOADED" ? payload.today : today,
-    lists: (lists = [], {type, payload}) => type === "DASHBOARD_LOADED" ? payload.lists : lists,
-    currentList: (currentList = 'Усі завдання', {type, payload}) => type === "SET_CURRENT_LIST" ? payload : currentList,
-    newList: (newList = '', {type, payload}) => type === "SET_NEW_LIST" ? payload : newList,
-  })
+const defaultState = {
+  today: 0,
+  lists: [],
+  currentList: 'Усі завдання'
+}
+
+export const dashboardReducer = (state = defaultState, {type, payload}) => {
+  switch(type) {
+    case "DASHBOARD_LOADED":
+      return {...state, today: payload.today, lists: payload.lists };
+
+    case "SET_CURRENT_LIST":
+      return {...state, currentList: payload};
+
+    case "CREATE_LIST":
+      return {...state, lists: [...state.lists, payload]};
+
+    case "DELETE_LIST":
+      const deleteRes = state.lists.filter(list => list.id !== payload.id);
+      return {...state, lists: deleteRes};
+
+    default:
+      return state;
+  }
+
+}
+
 // /REDUCERS

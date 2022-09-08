@@ -3,26 +3,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadTasks, setFilteredTasks, createNewTask, updateOneTask, deleteOneTask } from '../store/tasksReducer';
 
 export const useTasks = (endPoint) => {
-  const tasks = useSelector(state => state.tasks.tasks);
-  const filterRule = useSelector(state => state.tasks.filterRule);
-  const newChanges = useSelector(state => state.tasks.newChanges);
+  const allTasks = useSelector(({ tasks }) => tasks.allTasks);
+  const filterRule = useSelector(({ tasks }) => tasks.filterRule);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(loadTasks(endPoint))
-  }, [endPoint, newChanges])
+  }, [endPoint])
 
   useEffect(() => {
+    console.log('filter');
     filterTasks(filterRule)
-  }, [tasks, filterRule])
+  }, [allTasks, filterRule])
 
   function filterTasks(rule) {
     if (rule === 'done') {
-      dispatch(setFilteredTasks(tasks.filter(t => t.done === true)))
+      dispatch(setFilteredTasks(allTasks.filter(t => t.done === true)))
     } else if (rule === 'unDone') {
-      dispatch(setFilteredTasks(tasks.filter(t => t.done === false)))
+      dispatch(setFilteredTasks(allTasks.filter(t => t.done === false)))
     } else {
-      dispatch(setFilteredTasks(tasks))
+      dispatch(setFilteredTasks(allTasks))
     }
   }
 
@@ -30,8 +30,8 @@ export const useTasks = (endPoint) => {
     dispatch(createNewTask(newTask));
   }
 
-  function updateTask(taskId, newValues) {
-    dispatch(updateOneTask(taskId, newValues));
+  function updateTask(taskId, newValues, listId) {
+    dispatch(updateOneTask(taskId, newValues, listId));
   }
 
   function deleteTask(taskId) {

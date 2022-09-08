@@ -2,15 +2,17 @@ import React from 'react';
 import { useState } from 'react';
 import { Dashboard } from './Dashboard';
 
+import { useDispatch } from 'react-redux';
+import { createNewList } from '../store/dashboardReducer';
+
 import { ReactSVG } from 'react-svg';
 import logo from '../assets/icons/logo.svg';
 import exit from  '../assets/icons/exit.svg';
-import { useDispatch } from 'react-redux';
-import { createNewList } from '../store/dashboardReducer';
 
 export const Sidebar = () => {
     const [listName, setListName] = useState('');
     const dispatch = useDispatch();
+    
     function createList(e) {
         e.preventDefault();
         dispatch(createNewList(listName));

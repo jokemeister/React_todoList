@@ -80,7 +80,7 @@ export const TaskForm = props => {
         if (formState === 'create') {
             return createTask(newTask)
         } else {
-            return updateTask(currentTask.id, newTask);
+            return updateTask(currentTask.id, newTask, currentTask.list_id);
         }
 
     }

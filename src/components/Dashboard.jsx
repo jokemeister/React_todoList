@@ -21,17 +21,12 @@ export const Dashboard = () => {
   const today = useSelector(state => state.dashboard.today);
   const lists = useSelector(state => state.dashboard.lists);
   const currentList = useSelector(state => state.dashboard.currentList);
-  const newList = useSelector(state => state.dashboard.newList);
-  const newChanges = useSelector(state => state.tasks.newChanges);
   const currentTask = useSelector(state => state.tasks.currentTask);
   // /REDUX
 
   useEffect(() => {
     dispatch(loadDashboard);
-  }, [newList]);
-  useEffect(() => {
-    dispatch(loadDashboard);
-  }, [newChanges]);
+  }, []);
 
   useEffect(() => {
     lists[0] && setActiveList(lists);
@@ -46,8 +41,10 @@ export const Dashboard = () => {
       dispatch(setCurrentList('На сьогодні'))
     } else if (location.pathname === '/tasks') {
       dispatch(setCurrentList('Усі завдання'))
-    } else {
+    } else if (location.pathname === `/todo-list/${listId}`) {
       dispatch(setCurrentList(lists.filter(l => l.id === listId)[0].name))
+    } else {
+      dispatch(setCurrentList(''))
     };
   };
 

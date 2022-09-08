@@ -215,6 +215,7 @@ a {
 /* sidebar__list */
     .sidebar__list {
         overflow-y: scroll;
+        max-height: 50%;
     }
 
     .sidebar__list-item {
