@@ -48,7 +48,7 @@ export const TaskForm = props => {
     if (currentTask.name) {
         setName(currentTask.name);
         setDesc(currentTask.description);
-        setDueDate(currentTask.due_date.split('T')[0]);
+        setDueDate(currentTask.due_date ? currentTask.due_date.split('T')[0] : '');
         setListId(currentTask.list_id ? currentTask.list_id : currentTask.list.id);
     }
     newTask.done = currentTask.done;

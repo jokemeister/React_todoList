@@ -1,12 +1,15 @@
 import React from 'react';
 import { useEffect } from 'react';
+
 import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { loadDashboard, setCurrentList } from '../store/dashboardReducer';
+
 import { Lists } from './Lists';
 
 import { ReactSVG } from 'react-svg';
 import cross from  '../assets/icons/cross.svg';
-import { useDispatch, useSelector } from 'react-redux';
-import { loadDashboard, setCurrentList } from '../store/dashboardReducer';
 
 export const Dashboard = () => {
   // ROUTER
@@ -22,6 +25,7 @@ export const Dashboard = () => {
   const lists = useSelector(state => state.dashboard.lists);
   const currentList = useSelector(state => state.dashboard.currentList);
   const currentTask = useSelector(state => state.tasks.currentTask);
+
   // /REDUX
 
   useEffect(() => {

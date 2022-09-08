@@ -17,11 +17,11 @@ export const SingleTask = (props) => {
     const formState = useSelector(state => state.modal.formState);
 
     function checkHandler () {
-        updateTask(task.id, {done: !task.done})
+        updateTask(task.id, {done: !task.done}, task.list_id)
     }
 
     function deleteHandler() {
-        deleteTask(task.id)  
+        deleteTask(task.id, task.list_id)  
     }
 
     function setCurrentTask(task) {

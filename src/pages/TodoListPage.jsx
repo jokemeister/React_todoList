@@ -5,8 +5,9 @@ import { useTasks } from '../hooks/useTasks';
 import { useParams } from 'react-router-dom';
 
 export const TodoListPage = () => {
-    const { listId } = useParams(); 
-    const { filteredTasks, createTask, updateTask, deleteTask } = useTasks(`http://localhost:4000/lists/${listId}/tasks?all=true`);
+    let { listId } = useParams(); 
+    listId = parseInt(listId);
+    const { filteredTasks, createTask, updateTask, deleteTask } = useTasks(`http://localhost:4000/lists/${listId}/tasks?all=true`, listId);
 
     return (
         <div className="content show-all">

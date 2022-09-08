@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { createSelector } from 'reselect';
 
 // ACTIONS
   export const loadDashboard = dispatch => {
@@ -41,33 +42,57 @@ import axios from 'axios';
 
 // /ACTIONS
 
+// SELECTORS
+  export const selectOpenedTasks = createSelector(
+    state => state.dashboard.openedTasks, 
+    state => state.tasks.tasksByList, 
+    (openedTasks, tasksByList) => {
+      // console.log('openedTasks old', openedTasks);
+      // console.log('tasksByList', tasksByList);
+      let undoneTasks = Object.entries(tasksByList).map(([listId, tasks]) => [
+        listId,
+        tasks.reduce((countOfUndone, task) => task.done ? countOfUndone : countOfUndone+1, 0)
+      ])
+      // console.log('NewTasks', undoneTasks);
+      // console.log('obj', Object.fromEntries(undoneTasks));
+      // console.log('asdadsas oibs', Object.assign({}, openedTasks, Object.fromEntries(undoneTasks)));
+      return Object.assign({}, openedTasks, Object.fromEntries(undoneTasks));
+    }
+  )
+// /SELECTORS
+
 // REDUCERS
 
-const defaultState = {
-  today: 0,
-  lists: [],
-  currentList: 'Усі завдання'
-}
-
-export const dashboardReducer = (state = defaultState, {type, payload}) => {
-  switch(type) {
-    case "DASHBOARD_LOADED":
-      return {...state, today: payload.today, lists: payload.lists };
-
-    case "SET_CURRENT_LIST":
-      return {...state, currentList: payload};
-
-    case "CREATE_LIST":
-      return {...state, lists: [...state.lists, payload]};
-
-    case "DELETE_LIST":
-      const deleteRes = state.lists.filter(list => list.id !== payload.id);
-      return {...state, lists: deleteRes};
-
-    default:
-      return state;
+  const defaultState = {
+    today: 0,
+    lists: [],
+    currentList: 'Усі завдання',
+    openedTasks: {}
   }
 
-}
+  export const dashboardReducer = (state = defaultState, {type, payload}) => {
+    switch(type) {
+      case "DASHBOARD_LOADED":
+        let openedTasks = {}
+        payload.lists.forEach(list => {
+          openedTasks = {...openedTasks, [list.id]: parseInt(list.undone)}
+        });
+        return {...state, today: payload.today, lists: payload.lists, openedTasks: openedTasks };
+
+      case "SET_CURRENT_LIST":
+        return {...state, currentList: payload};
+
+      case "CREATE_LIST":
+        return {...state, lists: [...state.lists, payload]};
+
+      case "DELETE_LIST":
+        const deleteRes = state.lists.filter(list => list.id !== payload.id);
+        return {...state, lists: deleteRes};
+
+      default:
+        return state;
+    }
+
+  }
 
 // /REDUCERS
