@@ -69,14 +69,6 @@ export const Dashboard = () => {
 
   return (
     <ul className="sidebar__list">
-      <NavLink to="/tasks">
-          <li className="sidebar__list-item default-list" onClick={ clickHandler }>
-              <span className='sidebar__list-item__title'>Усі завдання</span>
-              <button className="list__remove cross-btn">
-                <ReactSVG beforeInjection={src => { src.classList.add('list__remove-svg'); src.classList.add('cross-btn__svg') }} wrapper='span' src={ cross } />
-              </button>
-          </li>
-      </NavLink>
       <NavLink to="/today">
           <li className="sidebar__list-item default-list" onClick={ clickHandler }>
               <span className='sidebar__list-item__title'>На сьогодні</span>
